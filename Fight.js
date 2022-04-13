@@ -307,9 +307,17 @@ function run1mode() {
         }
     }
     else if (mySpawn.warstats) {
-        //开始推进模式
+        //开始推进模式，但是?格之内有敌人就要追
         for (let redmix of Redball) {
-            redmix.moveTo(enemySpawn)
+            let closeenemycreep = findClosestByRange(redmix, enemyCreeps)
+            let rangecloseenemycreep = getRange(redmix, closeenemycreep);
+            console.log("rangecloseenemycreep：", rangecloseenemycreep)
+            if (rangecloseenemycreep <= 7) {
+                redmix.moveTo(rangecloseenemycreep)
+            }
+            else if (rangecloseenemycreep > 7) {
+                redmix.moveTo(enemySpawn)
+            }
         }
     }
     //红球逻辑:战斗
@@ -362,7 +370,7 @@ function run1mode() {
                }
            }
        }
-   */
+    */
 
 
     //绿球移动逻辑(新版本)
@@ -481,6 +489,7 @@ function run1mode() {
     //防偷家逻辑,一体机守家，攻击离家最近的爬
     //守家的模式是只在基地附近活动
     //随时治疗，远程打击
+    //绝对不走沼泽，上下13没有沼泽
 
 }
 

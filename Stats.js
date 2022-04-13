@@ -273,19 +273,19 @@ export function Stats() {
     console.log("我方数量：", myCreeps.length)
     console.log("敌人数量：", enemyCreeps.length)
     console.log("运输数量：", Carrier.length)
-    for (let i of Carrier) {
-        console.log("编号：", i.num)
-    }
+    // for (let i of Carrier) {
+    //     console.log("编号：", i.num)
+    // }
     console.log("红球数量：", Redball.length)
-    for (let i of Redball) {
-        console.log("编号：", i.num)
-    }
+    // for (let i of Redball) {
+    //     console.log("编号：", i.num)
+    // }
     console.log("绿球数量：", Greenball.length)
-    for (let i of Greenball) {
-        console.log("编号：", i.num)
-    }
+    // for (let i of Greenball) {
+    //     console.log("编号：", i.num)
+    // }
     console.log("蓝球数量：", Blueball.length)
-    for (let i of Blueball) {
-        console.log("编号：", i.num)
-    }
+    // for (let i of Blueball) {
+    //     console.log("编号：", i.num)
+    // }
 }

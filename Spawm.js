@@ -285,12 +285,12 @@ function run1mode() {
 
 
     const body_carriers = [CARRY, MOVE, CARRY, MOVE];
-    const body_redball = [TOUGH, TOUGH, TOUGH, ATTACK, MOVE, ATTACK, MOVE, ATTACK, MOVE, ATTACK, MOVE, ATTACK, MOVE];
+    const body_redball = [TOUGH, TOUGH, TOUGH, TOUGH, MOVE, MOVE, MOVE, MOVE, ATTACK, ATTACK, ATTACK, ATTACK, ATTACK, ATTACK, ATTACK, MOVE, MOVE, MOVE];
     const body_greenball = [MOVE, MOVE, MOVE, MOVE, MOVE, MOVE, HEAL, HEAL];
-    const body_blueball = [MOVE, MOVE, MOVE, MOVE, MOVE, RANGED_ATTACK, RANGED_ATTACK, RANGED_ATTACK, RANGED_ATTACK, RANGED_ATTACK];
+    const body_blueball = [MOVE, MOVE, MOVE, MOVE, MOVE, MOVE, RANGED_ATTACK, RANGED_ATTACK, RANGED_ATTACK, RANGED_ATTACK];
     const body_allinoners = [MOVE, MOVE, MOVE, MOVE, RANGED_ATTACK, RANGED_ATTACK, HEAL, HEAL];
 
-    const fighttime = 476 //主动作战开始时间
+    const fighttime = 500 //主动作战开始时间
 
     //基地位置侧
     mySpawn.rampos = mySpawn.x > 50 ? "右侧" : "左侧"
@@ -310,14 +310,14 @@ function run1mode() {
             Redballmix.num = Redball.length
         }
     }
-    else if (Greenball.length < 3) {
+    else if (Greenball.length < 2) {
         let Greenballmix = mySpawn.spawnCreep(body_greenball).object;
         if (Greenballmix) {
             Greenballmix.type = "Greenball"
             Greenballmix.num = Greenball.length
         }
     }
-    else if (Blueball.length < 4) {
+    else if (Blueball.length < 5) {
         let Blueballmix = mySpawn.spawnCreep(body_blueball).object;
         if (Blueballmix) {
             Blueballmix.type = "Blueball"

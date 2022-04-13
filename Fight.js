@@ -284,13 +284,13 @@ function run1mode() {
     let teampos = {}
     //集结点设置
     if (mySpawn.rampos == "左侧") {
-        teampos = { x: mySpawn.x + 4, y: mySpawn.y - 4 }
+        teampos = { x: mySpawn.x + 4, y: mySpawn.y - 3 }
     }
     else if (mySpawn.rampos == "右侧") {
-        teampos = { x: mySpawn.x - 4, y: mySpawn.y - 4 }
+        teampos = { x: mySpawn.x - 4, y: mySpawn.y - 3 }
     }
     else {
-        teampos = { x: mySpawn.x + 4, y: mySpawn.y - 4 }
+        teampos = { x: mySpawn.x + 4, y: mySpawn.y - 3 }
     }
 
     //红球逻辑:移动
@@ -302,7 +302,7 @@ function run1mode() {
     else if (!mySpawn.warstats && mySpawn.isclosecreeps) {
         //找接近的敌爬打
         for (let redmix of Redball) {
-            let closeenemyCreep = findClosestByRange(redmix, enemyCreeps)
+            let closeenemyCreep = findClosestByRange(mySpawn, enemyCreeps)
             redmix.moveTo(closeenemyCreep)
         }
     }

@@ -284,13 +284,13 @@ function run1mode() {
     let teampos = {}
     //集结点设置
     if (mySpawn.rampos == "左侧") {
-        teampos = { x: mySpawn.x + 3, y: mySpawn.y + 3 }
+        teampos = { x: mySpawn.x + 4, y: mySpawn.y - 4 }
     }
     else if (mySpawn.rampos == "右侧") {
-        teampos = { x: mySpawn.x - 3, y: mySpawn.y + 3 }
+        teampos = { x: mySpawn.x - 4, y: mySpawn.y - 4 }
     }
     else {
-        teampos = { x: mySpawn.x + 3, y: mySpawn.y + 3 }
+        teampos = { x: mySpawn.x + 4, y: mySpawn.y - 4 }
     }
 
     //红球逻辑:移动
@@ -314,29 +314,69 @@ function run1mode() {
     }
     //红球逻辑:战斗
     for (let redmix of Redball) {
-        let rangeSpawm = getRange(redmix, enemySpawn);
-        let closeenemycreep = findClosestByRange(redmix, enemyCreeps)
-        let rangecloseenemycreep = getRange(redmix, closeenemycreep);
-        if (rangeSpawm <= 1) {
+        if (enemyCreeps) {
+            let closeenemycreep = findClosestByRange(redmix, enemyCreeps)
+            let rangecloseenemycreep = getRange(redmix, closeenemycreep);
+            if (rangecloseenemycreep <= 1) {
+                redmix.attack(closeenemycreep)
+            }
+            else {
+                redmix.attack(enemySpawn)
+            }
+        } else {
             redmix.attack(enemySpawn)
         }
-        else if (rangecloseenemycreep <= 1) { redmix.attack(closeenemycreep) }
     }
 
 
-    //绿球移动逻辑
-    let greenballOdd = getObjectsByPrototype(Creep).filter(s => s.type == "Greenball" && s.num % 2 == 1);
-    //console.log(greenballOdd)
-    let greenballEven = getObjectsByPrototype(Creep).filter(s => s.type == "Greenball" && s.num % 2 == 0);
-    let redballOdd = getObjectsByPrototype(Creep).filter(s => s.type == "Redball" && s.num % 2 == 1);
-    let redballEven = getObjectsByPrototype(Creep).filter(s => s.type == "Redball" && s.num % 2 == 0);
-    //奇数绿跟奇数红
-    for (let greenodd of greenballOdd) {
-        greenodd.moveTo(redballOdd[0])
-    }
-    //偶数绿跟偶数红
-    for (let greeneven of greenballEven) {
-        greeneven.moveTo(redballEven[0])
+    /*   //绿球移动逻辑(旧版本)
+       let greenballOdd = getObjectsByPrototype(Creep).filter(s => s.type == "Greenball" && s.num % 2 == 1);
+       let greenballEven = getObjectsByPrototype(Creep).filter(s => s.type == "Greenball" && s.num % 2 == 0);
+       let redballOdd = getObjectsByPrototype(Creep).filter(s => s.type == "Redball" && s.num % 2 == 1);
+       let redballEven = getObjectsByPrototype(Creep).filter(s => s.type == "Redball" && s.num % 2 == 0);
+       //奇数绿跟奇数红
+       if (redballOdd.length > 0) {
+           for (let greenodd of greenballOdd) {
+               greenodd.moveTo(redballOdd[0])
+           }
+       }
+       else {
+           if (Blueball.length > 0) {
+               for (let greenodd of greenballOdd) {
+                   let closeBlue = findClosestByRange(greenodd, Blueball)
+                   greenodd.moveTo(closeBlue)
+               }
+           }
+       }
+       //偶数绿跟偶数红
+       if (redballEven.length > 0) {
+           for (let greeneven of greenballEven) {
+               greeneven.moveTo(redballEven[0])
+           }
+       }
+       else {
+           if (Blueball.length > 0) {
+               for (let greeneven of greenballEven) {
+                   let closeBlue = findClosestByRange(greeneven, Blueball)
+                   greeneven.moveTo(closeBlue)
+               }
+           }
+       }
+   */
+
+
+    //绿球移动逻辑(新版本)
+    //跟随离对面基地最近的红球
+    let RedballclosetoenemySpawm = findClosestByRange(enemySpawn, Redball)
+    let BlueballclosetoenemySpawm = findClosestByRange(enemySpawn, Blueball)
+    if (RedballclosetoenemySpawm) {
+        for (let green of Greenball) {
+            green.moveTo(RedballclosetoenemySpawm)
+        }
+    } else if (BlueballclosetoenemySpawm) {
+        for (let green of Greenball) {
+            green.moveTo(BlueballclosetoenemySpawm)
+        }
     }
 
     //绿球战斗逻辑
@@ -379,33 +419,76 @@ function run1mode() {
         }
     }
 
-    //蓝球移动逻辑
-    //奇数跟奇数//偶数跟偶数
-    let blueballOdd = getObjectsByPrototype(Creep).filter(s => s.type == "Blueball" && s.num % 2 == 1);
-    //console.log(greenballOdd)
-    let blueballEven = getObjectsByPrototype(Creep).filter(s => s.type == "Blueball" && s.num % 2 == 0);
-    //奇数绿跟奇数红
-    for (let blueodd of blueballOdd) {
-        blueodd.moveTo(redballOdd[0])
-    }
-    //偶数绿跟偶数红
-    for (let blueeven of blueballEven) {
-        blueeven.moveTo(redballEven[0])
-    }
+    /*    //蓝球移动逻辑(旧版本)
+        //奇数跟奇数//偶数跟偶数
+        let blueballOdd = getObjectsByPrototype(Creep).filter(s => s.type == "Blueball" && s.num % 2 == 1);
+        let blueballEven = getObjectsByPrototype(Creep).filter(s => s.type == "Blueball" && s.num % 2 == 0);
+        //奇数蓝跟奇数绿
+        if (redballOdd.length > 0) {
+            for (let blueodd of blueballOdd) {
+                blueodd.moveTo(redballOdd[0])
+            }
+        } else {
+            for (let blueodd of blueballOdd) {
+                blueodd.moveTo(enemySpawn)
+            }
+        }
+        //偶数蓝跟偶数绿
+        if (redballEven.length > 0) {
+            for (let blueeven of blueballEven) {
+                blueeven.moveTo(redballEven[0])
+            }
+        } else {
+            for (let blueeven of blueballOdd) {
+                blueeven.moveTo(enemySpawn)
+            }
+        }
+    */
 
-
+    //蓝球移动逻辑(新版本)
+    //跟随离对面基地最近的红球
+    if (RedballclosetoenemySpawm) {
+        for (let blue of Blueball) {
+            blue.moveTo(RedballclosetoenemySpawm)
+        }
+    } else {
+        for (let blue of Blueball) {
+            blue.moveTo(enemySpawn)
+        }
+    }
 
     //蓝球战斗逻辑
     //3ranged1mass 
+    for (let bullmix of Blueball) {
+        let bullin3range = findInRange(bullmix, enemyCreeps, 3)
+        let lowesthitsTargetin3range = findlowesthits(bullin3range);
+        let bullin1range = findInRange(bullmix, enemyCreeps, 1)
+        let lowesthitsTargetin1range = findlowesthits(bullin1range);
 
+        if (bullmix.rangedAttack(enemySpawn) == 0) {
+            bullmix.rangedAttack(enemySpawn)
+        }
+        else if (bullin3range.length > 0) {
+            if (lowesthitsTargetin1range) {
+                bullmix.rangedMassAttack(lowesthitsTargetin1range)
+            }
+            else if (lowesthitsTargetin3range) {
+                bullmix.rangedAttack(lowesthitsTargetin3range)
+            }
+        }
+    }
 
-
-
-
-
-
-
-
-
+    //防偷家逻辑,一体机守家，攻击离家最近的爬
 
 }
+
+function findlowesthits(creeps) {
+    let bar = creeps[0];
+    for (let i of creeps) {
+        if (i.hits < bar.hits) {
+            bar = i
+        }
+    }
+    return bar
+}
+

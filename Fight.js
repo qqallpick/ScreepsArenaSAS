@@ -315,8 +315,6 @@ function run1mode() {
     //红球逻辑:战斗
     for (let redmix of Redball) {
         let rangeSpawm = getRange(redmix, enemySpawn);
-        let redballfindenemyspawn1inrange = findInRange(redmix, enemySpawn, 1)
-        let redballfindenemycreeps1inrange = findInRange(redmix, enemyCreeps, 1)
         let closeenemycreep = findClosestByRange(redmix, enemyCreeps)
         let rangecloseenemycreep = getRange(redmix, closeenemycreep);
         if (rangeSpawm <= 1) {
@@ -327,26 +325,29 @@ function run1mode() {
 
 
     //绿球移动逻辑
-    let greenballOdd = getObjectsByPrototype(Greenball).filter(s => s.num % 2 == 1);
-    let greenballEven = getObjectsByPrototype(Greenball).filter(s => s.num % 2 == 0);
-    let redballOdd = getObjectsByPrototype(Redball).filter(s => s.num % 2 == 1)[0];
-    let redballEven = getObjectsByPrototype(Redball).filter(s => s.num % 2 == 0)[0];
+    let greenballOdd = getObjectsByPrototype(Creep).filter(s => s.type == "Greenball" && s.num % 2 == 1);
+    //console.log(greenballOdd)
+    let greenballEven = getObjectsByPrototype(Creep).filter(s => s.type == "Greenball" && s.num % 2 == 0);
+    let redballOdd = getObjectsByPrototype(Creep).filter(s => s.type == "Redball" && s.num % 2 == 1);
+    let redballEven = getObjectsByPrototype(Creep).filter(s => s.type == "Redball" && s.num % 2 == 0);
     //奇数绿跟奇数红
     for (let greenodd of greenballOdd) {
-        greenodd.moveTo(redballOdd)
+        greenodd.moveTo(redballOdd[0])
     }
     //偶数绿跟偶数红
     for (let greeneven of greenballEven) {
-        greeneven.moveTo(redballEven)
+        greeneven.moveTo(redballEven[0])
     }
 
     //绿球战斗逻辑
     //治疗顺序1范围内有红球就不停治疗 2范围内血量百分比最低 3自己有伤先治疗自己 
     //三格内用range，一格内用heal
     for (let greenball of Greenball) {
-        let lowhitsRedball = getObjectsByPrototype(Redball).filter(i.hits < i.hitsMax);
+        let lowhitsRedball = getObjectsByPrototype(Redball).filter(i => i.hits < i.hitsMax);
         let greenballFindRedballin1range = findInRange(greenball, lowhitsRedball, 1)
         let greenballFindRedballin3range = findInRange(greenball, lowhitsRedball, 3)
+        let greenballRedballin3range = findInRange(greenball, Redball, 3)
+        let greenballRedballin1range = findInRange(greenball, Redball, 1)
         let lowhitsCreeps = getObjectsByPrototype(Creep).filter(i => i.my && i.hits < i.hitsMax);
         let lowhitsCreepsin1range = findInRange(greenball, lowhitsCreeps, 1)
         let lowhitsCreepsin3range = findInRange(greenball, lowhitsCreeps, 3)
@@ -364,16 +365,27 @@ function run1mode() {
         else if (lowhitsCreepsin3range.length > 0) {
             greenball.rangedHeal(lowhitsCreepsin3range[0])
         }
-        //以上没有就治疗自己
-        else {
+        //自己受伤治疗自己
+        else if (greenball.hits < greenball.hitsMax) {
             greenball.heal(greenball)
+        }
+        else {
+            if (greenballRedballin1range.length > 0) {
+                greenball.heal(greenballRedballin1range[0])
+            }
+            else if (greenballRedballin3range.length > 0) {
+                greenball.rangedHeal(greenballRedballin3range[0])
+            }
         }
     }
 
     //蓝球移动逻辑
+    //奇数跟奇数//偶数跟偶数
+
+
 
     //蓝球战斗逻辑
-
+    //3ranged1mass 
 
 
 

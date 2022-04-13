@@ -261,7 +261,7 @@ export function Stats() {
     let Greenball = getObjectsByPrototype(Creep).filter(s => s.type == "Greenball");
     let Blueball = getObjectsByPrototype(Creep).filter(s => s.type == "Blueball");
     let enemyCreeps = getObjectsByPrototype(Creep).filter(s => !s.my);
-
+    let myCreeps = getObjectsByPrototype(Creep).filter(s => s.my);
 
     //负责显示状态，具体实现在各个模块里面
 
@@ -270,6 +270,7 @@ export function Stats() {
     console.log("基地位置：", mySpawn.rampos)
     console.log("战争状态：", mySpawn.warstats)
     console.log("敌人接近：", mySpawn.isclosecreeps)
+    console.log("我方数量：", myCreeps.length)
     console.log("敌人数量：", enemyCreeps.length)
     console.log("运输数量：", Carrier.length)
     for (let i of Carrier) {

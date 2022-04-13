@@ -381,6 +381,17 @@ function run1mode() {
 
     //蓝球移动逻辑
     //奇数跟奇数//偶数跟偶数
+    let blueballOdd = getObjectsByPrototype(Creep).filter(s => s.type == "Blueball" && s.num % 2 == 1);
+    //console.log(greenballOdd)
+    let blueballEven = getObjectsByPrototype(Creep).filter(s => s.type == "Blueball" && s.num % 2 == 0);
+    //奇数绿跟奇数红
+    for (let blueodd of blueballOdd) {
+        blueodd.moveTo(redballOdd[0])
+    }
+    //偶数绿跟偶数红
+    for (let blueeven of blueballEven) {
+        blueeven.moveTo(redballEven[0])
+    }
 
 
 

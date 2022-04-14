@@ -307,24 +307,33 @@ function run1mode() {
         }
     }
     else if (mySpawn.warstats) {
-        //开始推进模式，但是?格之内有敌人就要追
+        //开始推进模式，但是?格之内有敌人就要追，如果已经接近主基地就打基地
         for (let redmix of Redball) {
-            let closeenemycreep = findClosestByRange(redmix, enemyCreeps)
-            let rangecloseenemycreep = getRange(redmix, closeenemycreep);
-            console.log("rangecloseenemycreep：", rangecloseenemycreep)
-            if (rangecloseenemycreep <= 7) {
-                redmix.moveTo(rangecloseenemycreep)
+            if (enemyCreeps.length > 0) {
+                let closeenemycreep = findClosestByRange(redmix, enemyCreeps)
+                let rangecloseenemycreep = getRange(redmix, closeenemycreep);
+                let rangecloseenemyspawm = getRange(redmix, enemySpawn);
+                console.log("rangecloseenemycreep：", rangecloseenemycreep)
+                console.log("rangecloseenemyspawm ：", rangecloseenemyspawm)
+                if (rangecloseenemycreep <= 4 && rangecloseenemyspawm > 7) {
+                    console.log("追敌人")
+                    redmix.moveTo(rangecloseenemycreep)
+                } else {
+                    console.log("去基地")
+                    redmix.moveTo(enemySpawn)
+                }
             }
-            else if (rangecloseenemycreep > 7) {
+            else {
+                console.log("去基地")
                 redmix.moveTo(enemySpawn)
             }
         }
     }
     //红球逻辑:战斗
     for (let redmix of Redball) {
-        if (enemyCreeps) {
+        if (enemyCreeps.length > 0) {
             let closeenemycreep = findClosestByRange(redmix, enemyCreeps)
-            let rangecloseenemycreep = getRange(redmix, closeenemycreep);
+            let rangecloseenemycreep = getRange(redmix, closeenemycreep)
             if (rangecloseenemycreep <= 1) {
                 redmix.attack(closeenemycreep)
             }
@@ -337,55 +346,59 @@ function run1mode() {
     }
 
 
-    /*   //绿球移动逻辑(旧版本)
-       let greenballOdd = getObjectsByPrototype(Creep).filter(s => s.type == "Greenball" && s.num % 2 == 1);
-       let greenballEven = getObjectsByPrototype(Creep).filter(s => s.type == "Greenball" && s.num % 2 == 0);
-       let redballOdd = getObjectsByPrototype(Creep).filter(s => s.type == "Redball" && s.num % 2 == 1);
-       let redballEven = getObjectsByPrototype(Creep).filter(s => s.type == "Redball" && s.num % 2 == 0);
-       //奇数绿跟奇数红
-       if (redballOdd.length > 0) {
-           for (let greenodd of greenballOdd) {
-               greenodd.moveTo(redballOdd[0])
-           }
-       }
-       else {
-           if (Blueball.length > 0) {
-               for (let greenodd of greenballOdd) {
-                   let closeBlue = findClosestByRange(greenodd, Blueball)
-                   greenodd.moveTo(closeBlue)
-               }
-           }
-       }
-       //偶数绿跟偶数红
-       if (redballEven.length > 0) {
-           for (let greeneven of greenballEven) {
-               greeneven.moveTo(redballEven[0])
-           }
-       }
-       else {
-           if (Blueball.length > 0) {
-               for (let greeneven of greenballEven) {
-                   let closeBlue = findClosestByRange(greeneven, Blueball)
-                   greeneven.moveTo(closeBlue)
-               }
-           }
-       }
-    */
+    //绿球移动逻辑(旧版本)
 
-
-    //绿球移动逻辑(新版本)
-    //跟随离对面基地最近的红球
+    let greenballOdd = getObjectsByPrototype(Creep).filter(s => s.type == "Greenball" && s.num == 0);
+    let greenballEven = getObjectsByPrototype(Creep).filter(s => s.type == "Greenball" && s.num == 1);
+    let redballOdd = getObjectsByPrototype(Creep).filter(s => s.type == "Redball" && s.num == 0);
+    let redballEven = getObjectsByPrototype(Creep).filter(s => s.type == "Redball" && s.num == 1);
     let RedballclosetoenemySpawm = findClosestByRange(enemySpawn, Redball)
     let BlueballclosetoenemySpawm = findClosestByRange(enemySpawn, Blueball)
-    if (RedballclosetoenemySpawm) {
-        for (let green of Greenball) {
-            green.moveTo(RedballclosetoenemySpawm)
-        }
-    } else if (BlueballclosetoenemySpawm) {
-        for (let green of Greenball) {
-            green.moveTo(BlueballclosetoenemySpawm)
+    //奇数绿跟奇数红
+    if (redballOdd.length > 0) {
+        for (let greenodd of greenballOdd) {
+            greenodd.moveTo(redballOdd[0])
         }
     }
+    else {
+        if (Blueball.length > 0) {
+            for (let greenodd of greenballOdd) {
+                let closeBlue = findClosestByRange(greenodd, Blueball)
+                greenodd.moveTo(closeBlue)
+            }
+        }
+    }
+    //偶数绿跟偶数红
+    if (redballEven.length > 0) {
+        for (let greeneven of greenballEven) {
+            greeneven.moveTo(redballEven[0])
+        }
+    }
+    else {
+        if (Blueball.length > 0) {
+            for (let greeneven of greenballEven) {
+                let closeBlue = findClosestByRange(greeneven, Blueball)
+                greeneven.moveTo(closeBlue)
+            }
+        }
+    }
+
+
+
+    /* //绿球移动逻辑(新版本)
+     //跟随离对面基地最近的红球
+     let RedballclosetoenemySpawm = findClosestByRange(enemySpawn, Redball)
+     let BlueballclosetoenemySpawm = findClosestByRange(enemySpawn, Blueball)
+     if (RedballclosetoenemySpawm) {
+         for (let green of Greenball) {
+             green.moveTo(RedballclosetoenemySpawm)
+         }
+     } else if (BlueballclosetoenemySpawm) {
+         for (let green of Greenball) {
+             green.moveTo(BlueballclosetoenemySpawm)
+         }
+     }
+     */
 
     //绿球战斗逻辑
     //治疗顺序1范围内有红球就不停治疗 2范围内血量百分比最低 3自己有伤先治疗自己 
@@ -427,43 +440,44 @@ function run1mode() {
         }
     }
 
-    /*    //蓝球移动逻辑(旧版本)
-        //奇数跟奇数//偶数跟偶数
-        let blueballOdd = getObjectsByPrototype(Creep).filter(s => s.type == "Blueball" && s.num % 2 == 1);
-        let blueballEven = getObjectsByPrototype(Creep).filter(s => s.type == "Blueball" && s.num % 2 == 0);
-        //奇数蓝跟奇数绿
-        if (redballOdd.length > 0) {
-            for (let blueodd of blueballOdd) {
-                blueodd.moveTo(redballOdd[0])
-            }
-        } else {
-            for (let blueodd of blueballOdd) {
-                blueodd.moveTo(enemySpawn)
-            }
-        }
-        //偶数蓝跟偶数绿
-        if (redballEven.length > 0) {
-            for (let blueeven of blueballEven) {
-                blueeven.moveTo(redballEven[0])
-            }
-        } else {
-            for (let blueeven of blueballOdd) {
-                blueeven.moveTo(enemySpawn)
-            }
-        }
-    */
-
-    //蓝球移动逻辑(新版本)
-    //跟随离对面基地最近的红球
-    if (RedballclosetoenemySpawm) {
-        for (let blue of Blueball) {
-            blue.moveTo(RedballclosetoenemySpawm)
+    //蓝球移动逻辑(旧版本)
+    //奇数跟奇数//偶数跟偶数
+    let blueballOdd = getObjectsByPrototype(Creep).filter(s => s.type == "Blueball" && s.num % 2 == 1);
+    let blueballEven = getObjectsByPrototype(Creep).filter(s => s.type == "Blueball" && s.num % 2 == 0);
+    //奇数蓝跟奇数绿
+    if (redballOdd.length > 0) {
+        for (let blueodd of blueballOdd) {
+            blueodd.moveTo(redballOdd[0])
         }
     } else {
-        for (let blue of Blueball) {
-            blue.moveTo(enemySpawn)
+        for (let blueodd of blueballOdd) {
+            blueodd.moveTo(enemySpawn)
         }
     }
+    //偶数蓝跟偶数绿
+    if (redballEven.length > 0) {
+        for (let blueeven of blueballEven) {
+            blueeven.moveTo(redballEven[0])
+        }
+    } else {
+        for (let blueeven of blueballOdd) {
+            blueeven.moveTo(enemySpawn)
+        }
+    }
+
+    /*  
+        //蓝球移动逻辑(新版本)
+        //跟随离对面基地最近的红球
+        if (RedballclosetoenemySpawm) {
+            for (let blue of Blueball) {
+                blue.moveTo(RedballclosetoenemySpawm)
+            }
+        } else {
+            for (let blue of Blueball) {
+                blue.moveTo(enemySpawn)
+            }
+        }
+        */
 
     //蓝球战斗逻辑
     //3ranged1mass 
@@ -491,7 +505,42 @@ function run1mode() {
     //随时治疗，远程打击
     //绝对不走沼泽，上下13没有沼泽
 
+    //守家：移动逻辑
+    //红球逻辑:移动
+    if (!mySpawn.isclosecreeps && enemyCreeps.length > 0) {
+        for (let redmix of Allinoner) {
+            redmix.moveTo(teampos)
+        }
+    }
+    else if (mySpawn.isclosecreeps) {
+        //找接近的敌爬打
+        for (let redmix of Redball) {
+            let closeenemyCreep = findClosestByRange(mySpawn, enemyCreeps)
+            redmix.moveTo(closeenemyCreep)
+        }
+    }
+    else if (enemyCreeps.length == 0) {
+        //开始推进模式
+        for (let redmix of Redball) {
+            redmix.moveTo(enemySpawn)
+        }
+    }
+    //守家，攻击逻辑攻击时不治疗，不攻击时自己治疗
+    for (let redmix of Allinoner) {
+        if (enemyCreeps.length > 0) {
+            let closeenemycreep = findClosestByRange(redmix, enemyCreeps)
+            let rangecloseenemycreep = getRange(redmix, closeenemycreep)
+            if (rangecloseenemycreep <= 1) {
+                redmix.attack(closeenemycreep)
+            }
+            else {
+                redmix.heal(redmix)
+            }
+        }
+    }
 }
+
+
 
 function findlowesthits(creeps) {
     let bar = creeps[0];

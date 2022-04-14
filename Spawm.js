@@ -284,11 +284,11 @@ function run1mode() {
     let SpawmtoEnemycreepsClose = findClosestByRange(mySpawn, enemyCreeps)
 
 
-    const body_carriers = [CARRY, MOVE, CARRY, MOVE];
+    const body_carriers = [MOVE, CARRY, MOVE, CARRY];
     const body_redball = [TOUGH, TOUGH, TOUGH, TOUGH, MOVE, MOVE, MOVE, MOVE, ATTACK, ATTACK, ATTACK, ATTACK, ATTACK, ATTACK, ATTACK, MOVE, MOVE, MOVE];
     const body_greenball = [MOVE, MOVE, MOVE, MOVE, MOVE, MOVE, HEAL, HEAL];
     const body_blueball = [MOVE, MOVE, MOVE, MOVE, MOVE, MOVE, RANGED_ATTACK, RANGED_ATTACK, RANGED_ATTACK, RANGED_ATTACK];
-    const body_allinoners = [MOVE, MOVE, MOVE, MOVE, RANGED_ATTACK, RANGED_ATTACK, HEAL, HEAL];
+    const body_allinoners = [MOVE, MOVE, MOVE, MOVE, ATTACK, ATTACK, HEAL, HEAL];
 
     const fighttime = 500 //主动作战开始时间
 
@@ -317,7 +317,7 @@ function run1mode() {
             Greenballmix.num = Greenball.length
         }
     }
-    else if (Blueball.length < 5) {
+    else if (Blueball.length < 4) {
         let Blueballmix = mySpawn.spawnCreep(body_blueball).object;
         if (Blueballmix) {
             Blueballmix.type = "Blueball"
@@ -329,6 +329,22 @@ function run1mode() {
         if (Allinonermix) {
             Allinonermix.type = "Allinoner"
             Allinonermix.num = Allinonermix.length
+        }
+    }
+    else {
+        if (Carrier.length < 2) {
+            let Carriermix = mySpawn.spawnCreep(body_carriers).object;
+            if (Carriermix) {
+                Carriermix.type = "Carrier"
+                Carriermix.num = Carrier.length
+            }
+        }
+        else if (Blueball.length < 8) {
+            let Blueballmix = mySpawn.spawnCreep(body_blueball).object;
+            if (Blueballmix) {
+                Blueballmix.type = "Blueball"
+                Blueballmix.num = Blueball.length
+            }
         }
     }
 

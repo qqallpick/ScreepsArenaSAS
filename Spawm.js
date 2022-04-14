@@ -296,43 +296,45 @@ function run1mode() {
     mySpawn.rampos = mySpawn.x > 50 ? "右侧" : "左侧"
 
     //出生顺序管理
-    if (Carrier.length < 1) {
-        let Carriermix = mySpawn.spawnCreep(body_carriers).object;
-        if (Carriermix) {
-            Carriermix.type = "Carrier"
-            Carriermix.num = Carrier.length
+    if (getTicks() <= 500) {
+        if (Carrier.length < 1) {
+            let Carriermix = mySpawn.spawnCreep(body_carriers).object;
+            if (Carriermix) {
+                Carriermix.type = "Carrier"
+                Carriermix.num = Carrier.length
+            }
+        }
+        else if (Redball.length < 2) {
+            let Redballmix = mySpawn.spawnCreep(body_redball).object;
+            if (Redballmix) {
+                Redballmix.type = "Redball"
+                Redballmix.num = Redball.length
+            }
+        }
+        else if (Greenball.length < 2) {
+            let Greenballmix = mySpawn.spawnCreep(body_greenball).object;
+            if (Greenballmix) {
+                Greenballmix.type = "Greenball"
+                Greenballmix.num = Greenball.length
+            }
+        }
+        else if (Blueball.length < 4) {
+            let Blueballmix = mySpawn.spawnCreep(body_blueball).object;
+            if (Blueballmix) {
+                Blueballmix.type = "Blueball"
+                Blueballmix.num = Blueball.length
+            }
+        }
+        else if (Allinoner.length < 1) {
+            let Allinonermix = mySpawn.spawnCreep(body_allinoners).object;
+            if (Allinonermix) {
+                Allinonermix.type = "Allinoner"
+                Allinonermix.num = Allinonermix.length
+                Allinonermix.flagnum = 1
+            }
         }
     }
-    else if (Redball.length < 2) {
-        let Redballmix = mySpawn.spawnCreep(body_redball).object;
-        if (Redballmix) {
-            Redballmix.type = "Redball"
-            Redballmix.num = Redball.length
-        }
-    }
-    else if (Greenball.length < 2) {
-        let Greenballmix = mySpawn.spawnCreep(body_greenball).object;
-        if (Greenballmix) {
-            Greenballmix.type = "Greenball"
-            Greenballmix.num = Greenball.length
-        }
-    }
-    else if (Blueball.length < 4) {
-        let Blueballmix = mySpawn.spawnCreep(body_blueball).object;
-        if (Blueballmix) {
-            Blueballmix.type = "Blueball"
-            Blueballmix.num = Blueball.length
-        }
-    }
-    else if (Allinoner.length < 6) {
-        let Allinonermix = mySpawn.spawnCreep(body_allinoners).object;
-        if (Allinonermix) {
-            Allinonermix.type = "Allinoner"
-            Allinonermix.num = Allinonermix.length
-            Allinonermix.flagnum = 1
-        }
-    }
-    else {
+    if (getTicks() > 500) {
         if (Carrier.length < 2) {
             let Carriermix = mySpawn.spawnCreep(body_carriers).object;
             if (Carriermix) {
@@ -361,10 +363,4 @@ function run1mode() {
         }
         else { mySpawn.isclosecreeps = false }
     }
-
-
-
-
-
-
 }

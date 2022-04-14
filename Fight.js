@@ -316,7 +316,7 @@ function run1mode() {
                 let closeenemycreep = findClosestByRange(redmix, enemyCreeps)
                 let rangecloseenemycreep = getRange(redmix, closeenemycreep);
                 let rangecloseenemyspawm = getRange(redmix, enemySpawn);
-                if (rangecloseenemycreep <= 1) {
+                if (rangecloseenemycreep <= 2) {
                     redmix.moveTo(closeenemycreep)
                 }
                 else {
@@ -471,16 +471,26 @@ function run1mode() {
 
     //蓝球移动逻辑(新版本)
     //跟随离对面基地最近的红球
-    if (RedballclosetoenemySpawm) {
-        for (let blue of Blueball) {
+    // for (let blue of Blueball) {
+    //     let blueballin3range = findInRange(blue, enemyCreeps, 3)
+    //     if (blueballin3range.length > 0) {
+    //         blue.moveTo(mySpawn)
+    //     }
+    //     else {
+    //         if (RedballclosetoenemySpawm) {
+    //             blue.moveTo(RedballclosetoenemySpawm)
+    //         } else {
+    //             blue.moveTo(enemySpawn)
+    //         }
+    //     }
+    // }
+    for (let blue of Blueball) {
+        if (RedballclosetoenemySpawm) {
             blue.moveTo(RedballclosetoenemySpawm)
-        }
-    } else {
-        for (let blue of Blueball) {
+        } else {
             blue.moveTo(enemySpawn)
         }
     }
-
 
     //蓝球战斗逻辑
     //3ranged1mass 

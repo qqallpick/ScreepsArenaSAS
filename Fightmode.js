@@ -253,7 +253,7 @@ Object.assign(global, {
 })
 //以上是万能头部
 
-
+ 
 export function Fightmode() {
     let mySpawn = getObjectsByPrototype(StructureSpawn).filter(s => s.my)[0];
     mySpawn.fightmode = 1

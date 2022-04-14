@@ -15,7 +15,7 @@ const body_attackers = [MOVE, MOVE, MOVE, MOVE, ATTACK, ATTACK, ATTACK, ATTACK];
 const body_carriers = [CARRY, CARRY, MOVE];
 const body_allinoners = [MOVE, MOVE, MOVE, MOVE, MOVE, MOVE, RANGED_ATTACK, HEAL];
 //万能头
-
+ 
 // 挖矿模块
 export function Harversterfun() {
     let mySpawn = getObjectsByPrototype(StructureSpawn).filter(s => s.my);

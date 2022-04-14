@@ -305,7 +305,7 @@ function run1mode() {
             let closeenemyCreep = findClosestByRange(mySpawn, enemyCreeps)
             redmix.moveTo(closeenemyCreep)
         }
-    }
+    } 
     else if (mySpawn.warstats) {
         //开始推进模式，但是?格之内有敌人就要追，如果已经接近主基地就打基地
         for (let redmix of Redball) {
@@ -313,18 +313,18 @@ function run1mode() {
                 let closeenemycreep = findClosestByRange(redmix, enemyCreeps)
                 let rangecloseenemycreep = getRange(redmix, closeenemycreep);
                 let rangecloseenemyspawm = getRange(redmix, enemySpawn);
-                console.log("rangecloseenemycreep：", rangecloseenemycreep)
-                console.log("rangecloseenemyspawm ：", rangecloseenemyspawm)
+                //console.log("rangecloseenemycreep：", rangecloseenemycreep)
+                //console.log("rangecloseenemyspawm ：", rangecloseenemyspawm)
                 if (rangecloseenemycreep <= 4 && rangecloseenemyspawm > 7) {
-                    console.log("追敌人")
+                    //console.log("追敌人")
                     redmix.moveTo(rangecloseenemycreep)
                 } else {
-                    console.log("去基地")
+                    //console.log("去基地")
                     redmix.moveTo(enemySpawn)
                 }
             }
             else {
-                console.log("去基地")
+                //console.log("去基地")
                 redmix.moveTo(enemySpawn)
             }
         }

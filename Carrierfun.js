@@ -5,7 +5,7 @@ import { MOVE, CARRY, WORK, ATTACK, RANGED_ATTACK, HEAL, RESOURCE_ENERGY, ERR_NO
 import { } from '/arena';
 import { getTicks } from '/game';
 
-let Har = [];
+let Har = []; 
 let Attacker = [];
 let Carrier = [];
 let Allinoner = [];

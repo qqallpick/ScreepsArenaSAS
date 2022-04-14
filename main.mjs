@@ -262,7 +262,7 @@ Object.assign(global, {
 
 export function loop() {
 
-
+ 
     Fightmode();
     Spawm();
     Carry();

@@ -260,7 +260,7 @@ export function Carry() {
     switch (mySpawn.fightmode) {
         case 1: run1mode();
     }
-}
+} 
 
 function run1mode() {
     let mySpawn = getObjectsByPrototype(StructureSpawn).filter(s => s.my)[0];

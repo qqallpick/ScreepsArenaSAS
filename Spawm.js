@@ -309,7 +309,7 @@ function run1mode() {
             Redballmix.type = "Redball"
             Redballmix.num = Redball.length
         }
-    }
+    } 
     else if (Greenball.length < 2) {
         let Greenballmix = mySpawn.spawnCreep(body_greenball).object;
         if (Greenballmix) {

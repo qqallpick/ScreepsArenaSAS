@@ -264,7 +264,7 @@ export function Stats() {
     let myCreeps = getObjectsByPrototype(Creep).filter(s => s.my);
 
     //负责显示状态，具体实现在各个模块里面
-
+ 
     console.log("游戏时间：", getTicks());
     console.log("战术模式：", mySpawn.fightmode)
     console.log("基地位置：", mySpawn.rampos)

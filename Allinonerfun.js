@@ -1,4 +1,4 @@
-//万能头
+//万能头 
 import { getObjectsByPrototype, findClosestByRange, findInRange, getRange } from '/game/utils';
 import { Creep, StructureSpawn, Source, StructureContainer } from '/game/prototypes';
 import { MOVE, CARRY, WORK, ATTACK, RANGED_ATTACK, HEAL, RESOURCE_ENERGY, ERR_NOT_IN_RANGE } from '/game/constants';

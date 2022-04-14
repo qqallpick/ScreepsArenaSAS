@@ -6,7 +6,7 @@ import { } from '/arena';
 import { getTicks } from '/game';
 
 let Har = [];
-let Attacker = [];
+let Attacker = []; 
 let Carrier = [];
 let Allinoner = [];
 

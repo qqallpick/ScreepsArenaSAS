@@ -288,7 +288,7 @@ function run1mode() {
     const body_redball = [TOUGH, TOUGH, TOUGH, TOUGH, MOVE, MOVE, MOVE, MOVE, ATTACK, ATTACK, ATTACK, ATTACK, ATTACK, ATTACK, ATTACK, MOVE, MOVE, MOVE];
     const body_greenball = [MOVE, MOVE, MOVE, MOVE, MOVE, MOVE, HEAL, HEAL];
     const body_blueball = [MOVE, MOVE, MOVE, MOVE, MOVE, MOVE, RANGED_ATTACK, RANGED_ATTACK, RANGED_ATTACK, RANGED_ATTACK];
-    const body_allinoners = [MOVE, MOVE, MOVE, MOVE, ATTACK, ATTACK, HEAL, HEAL];
+    const body_allinoners = [MOVE, MOVE, MOVE, MOVE, RANGED_ATTACK, RANGED_ATTACK, HEAL, HEAL];
 
     const fighttime = 500 //主动作战开始时间
 
@@ -309,7 +309,7 @@ function run1mode() {
             Redballmix.type = "Redball"
             Redballmix.num = Redball.length
         }
-    } 
+    }
     else if (Greenball.length < 2) {
         let Greenballmix = mySpawn.spawnCreep(body_greenball).object;
         if (Greenballmix) {
@@ -324,11 +324,12 @@ function run1mode() {
             Blueballmix.num = Blueball.length
         }
     }
-    else if (Allinoner.length < 1) {
+    else if (Allinoner.length < 6) {
         let Allinonermix = mySpawn.spawnCreep(body_allinoners).object;
         if (Allinonermix) {
             Allinonermix.type = "Allinoner"
             Allinonermix.num = Allinonermix.length
+            Allinonermix.flagnum = 1
         }
     }
     else {

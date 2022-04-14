@@ -514,14 +514,14 @@ function run1mode() {
     }
     else if (mySpawn.isclosecreeps) {
         //找接近的敌爬打
-        for (let redmix of Redball) {
+        for (let redmix of Allinoner) {
             let closeenemyCreep = findClosestByRange(mySpawn, enemyCreeps)
             redmix.moveTo(closeenemyCreep)
         }
     }
     else if (enemyCreeps.length == 0) {
         //开始推进模式
-        for (let redmix of Redball) {
+        for (let redmix of Allinoner) {
             redmix.moveTo(enemySpawn)
         }
     }

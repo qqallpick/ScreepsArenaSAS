@@ -309,14 +309,14 @@ function run1mode() {
             redmix.moveTo(closeenemyCreep)
         }
     }
-    else if (mySpawn.warstats) {
+    else if (mySpawn.warstats && !mySpawn.isclosecreeps) {
         //开始推进模式，但是?格之内有敌人就要追，如果已经接近主基地就打基地
         for (let redmix of Redball) {
             if (enemyCreeps.length > 0) {
                 let closeenemycreep = findClosestByRange(redmix, enemyCreeps)
                 let rangecloseenemycreep = getRange(redmix, closeenemycreep);
                 let rangecloseenemyspawm = getRange(redmix, enemySpawn);
-                if (rangecloseenemycreep <= 2) {
+                if (rangecloseenemycreep <= 5 && rangecloseenemyspawm > 7) {
                     redmix.moveTo(closeenemycreep)
                 }
                 else {
@@ -325,6 +325,18 @@ function run1mode() {
             }
             else {
                 redmix.moveTo(enemySpawn)
+            }
+        }
+    }
+    else if (mySpawn.warstats && mySpawn.isclosecreeps) {
+        for (let redmix of Redball) {
+            let closeenemyCreep = findClosestByRange(mySpawn, enemyCreeps)
+            let rangecloseenemyspawm = getRange(redmix, enemySpawn);
+            if (rangecloseenemyspawm < 40) {
+                redmix.moveTo(enemySpawn)
+            }
+            else {
+                redmix.moveTo(closeenemyCreep)
             }
         }
     }
@@ -471,22 +483,18 @@ function run1mode() {
 
     //蓝球移动逻辑(新版本)
     //跟随离对面基地最近的红球
-    // for (let blue of Blueball) {
-    //     let blueballin3range = findInRange(blue, enemyCreeps, 3)
-    //     if (blueballin3range.length > 0) {
-    //         blue.moveTo(mySpawn)
-    //     }
-    //     else {
-    //         if (RedballclosetoenemySpawm) {
-    //             blue.moveTo(RedballclosetoenemySpawm)
-    //         } else {
-    //             blue.moveTo(enemySpawn)
-    //         }
-    //     }
-    // }
     for (let blue of Blueball) {
         if (RedballclosetoenemySpawm) {
-            blue.moveTo(RedballclosetoenemySpawm)
+            let redballin3range = findInRange(RedballclosetoenemySpawm, enemyCreeps, 3)
+            let redballiclosetoenemycreeps = findClosestByRange(RedballclosetoenemySpawm, enemyCreeps)
+            if (redballin3range.length > 0) {
+                blue.moveTo(redballiclosetoenemycreeps)
+            } else {
+                let bluetoredrange = getRange(blue, RedballclosetoenemySpawm)
+                if (bluetoredrange > 1) {
+                    blue.moveTo(RedballclosetoenemySpawm)
+                }
+            }
         } else {
             blue.moveTo(enemySpawn)
         }
@@ -577,8 +585,8 @@ function run1mode() {
     //攻击逻辑
     for (let aio of Allinoner) {
         let bullin3range = findInRange(aio, enemyCreeps, 3)
-        if (aio.rangedAttack(enemySpawn[0]) == 0) {
-            aio.rangedAttack(enemySpawn[0])
+        if (aio.rangedAttack(enemySpawn) == 0) {
+            aio.rangedAttack(enemySpawn)
         }
         else if (bullin3range.length > 0) {
             // let closestTarget = findClosestByRange(aio, enemyCreepsin3);
@@ -595,9 +603,6 @@ function run1mode() {
         }
     }
 }
-
-
-
 
 
 function findlowesthits(creeps) {

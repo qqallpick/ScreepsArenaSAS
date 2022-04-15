@@ -260,6 +260,7 @@ export function Stats() {
     let Redball = getObjectsByPrototype(Creep).filter(s => s.type == "Redball");
     let Greenball = getObjectsByPrototype(Creep).filter(s => s.type == "Greenball");
     let Blueball = getObjectsByPrototype(Creep).filter(s => s.type == "Blueball");
+    let Worker = getObjectsByPrototype(Creep).filter(s => s.type == "Worker");
     let enemyCreeps = getObjectsByPrototype(Creep).filter(s => !s.my);
     let myCreeps = getObjectsByPrototype(Creep).filter(s => s.my);
 
@@ -273,6 +274,7 @@ export function Stats() {
     console.log("我方数量：", myCreeps.length)
     console.log("敌人数量：", enemyCreeps.length)
     console.log("运输数量：", Carrier.length)
+    console.log("工人数量：", Worker.length)
     // for (let i of Carrier) {
     //     console.log("编号：", i.num)
     // }

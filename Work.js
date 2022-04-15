@@ -1,10 +1,3 @@
-import { Fightmode } from './Fightmode';
-import { Stats } from './Stats';
-import { Spawm } from './Spawm';
-import { Carry } from './Carry';
-import { Work } from './Work';
-import { Fight } from './Fight';
-
 //以下是万能头部
 import {
     ConstructionSite,
@@ -261,16 +254,33 @@ Object.assign(global, {
 //以上是万能头部
 
 
-export function loop() {
 
-
-    Fightmode();
-    Spawm();
-    Carry();
-    Work();
-    Fight();
-    Stats();
-
+export function Work() {
+    let mySpawn = getObjectsByPrototype(StructureSpawn).filter(s => s.my)[0];
+    switch (mySpawn.fightmode) {
+        case 1: run1mode();
+    }
 }
 
-
+function run1mode() {
+    let mySpawn = getObjectsByPrototype(StructureSpawn).filter(s => s.my)[0];
+    let Wroker = getObjectsByPrototype(Creep).filter(s => s.type == "Worker");
+    let Container = getObjectsByPrototype(StructureContainer).filter(s => s.store[RESOURCE_ENERGY] > 0);
+    let closeContainer = findClosestByRange(mySpawn, Container);
+    let myConstructionSites = getObjectsByPrototype(ConstructionSite).filter(i => i.my);
+    if (Wroker.length > 0) {
+        for (let Workermix of Wroker) {
+            if (Workermix.store.getFreeCapacity(RESOURCE_ENERGY)) {
+                let creepcloseContainer = findClosestByRange(Workermix, Container);
+                if (Workermix.withdraw(creepcloseContainer, RESOURCE_ENERGY) == ERR_NOT_IN_RANGE) {
+                    Workermix.moveTo(creepcloseContainer);
+                }
+            } else if (myConstructionSites.length > 0) {
+                let target = Workermix.findClosestByRange(myConstructionSites);
+                if (Workermix.build(target) == ERR_NOT_IN_RANGE) {
+                    Workermix.moveTo(target);
+                }
+            }
+        }
+    }
+}

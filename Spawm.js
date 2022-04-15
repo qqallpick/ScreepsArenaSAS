@@ -253,8 +253,6 @@ Object.assign(global, {
 })
 //以上是万能头部
 
-
-
 export function Spawm() {
     let mySpawn = getObjectsByPrototype(StructureSpawn).filter(s => s.my)[0];
     switch (mySpawn.fightmode) {
@@ -264,6 +262,7 @@ export function Spawm() {
 
 function run1mode() {
     let mySpawn = getObjectsByPrototype(StructureSpawn).filter(s => s.my)[0];
+    let myStructureRampart = getObjectsByPrototype(StructureRampart).filter(s => s.my);
     let myContainer = getObjectsByPrototype(StructureContainer).filter(s => s.my);
     let Container = getObjectsByPrototype(StructureContainer).filter(s => s.store[RESOURCE_ENERGY] > 0);
     let source = getObjectsByPrototype(Source).filter(s => s.energy > 0);
@@ -273,6 +272,7 @@ function run1mode() {
     let Har = getObjectsByPrototype(Creep).filter(s => s.type == "Harvester");
     let Attacker = getObjectsByPrototype(Creep).filter(s => s.type == "Attacker");
     let Carrier = getObjectsByPrototype(Creep).filter(s => s.type == "Carrier");
+    let Worker = getObjectsByPrototype(Creep).filter(s => s.type == "Worker");
     let Redball = getObjectsByPrototype(Creep).filter(s => s.type == "Redball");
     let Greenball = getObjectsByPrototype(Creep).filter(s => s.type == "Greenball");
     let Blueball = getObjectsByPrototype(Creep).filter(s => s.type == "Blueball");
@@ -282,9 +282,12 @@ function run1mode() {
     let aio_team_false = getObjectsByPrototype(Creep).filter(s => s.type == "Allinoner" && s.team == "false");
     let aio_team_true = getObjectsByPrototype(Creep).filter(s => s.type == "Allinoner" && s.team == "true");
     let SpawmtoEnemycreepsClose = findClosestByRange(mySpawn, enemyCreeps)
-
+    let Spawmpos = { x: mySpawn.x, y: mySpawn.y }
+    let Spawmposup = { x: mySpawn.x, y: mySpawn.y + 1 }
+    let Spawmposdown = { x: mySpawn.x, y: mySpawn.y - 1 }
 
     const body_carriers = [MOVE, CARRY, MOVE, CARRY];
+    const body_workers = [MOVE, CARRY, MOVE, WORK];
     const body_redball = [TOUGH, TOUGH, TOUGH, TOUGH, MOVE, MOVE, MOVE, MOVE, ATTACK, ATTACK, ATTACK, ATTACK, ATTACK, ATTACK, ATTACK, MOVE, MOVE, MOVE];
     const body_greenball = [MOVE, MOVE, MOVE, MOVE, MOVE, MOVE, HEAL, HEAL];
     const body_blueball = [MOVE, MOVE, MOVE, MOVE, MOVE, MOVE, RANGED_ATTACK, RANGED_ATTACK, RANGED_ATTACK, RANGED_ATTACK];
@@ -295,6 +298,14 @@ function run1mode() {
     //基地位置侧
     mySpawn.rampos = mySpawn.x > 50 ? "右侧" : "左侧"
 
+    //建筑相关
+    /*
+    createsite(Spawmpos, StructureRampart)
+    createsite(Spawmposup, StructureRampart)
+    createsite(Spawmposdown, StructureRampart)
+    createsite({ x: 67, y: 46 }, StructureTower)
+    */
+
     //出生顺序管理
     if (getTicks() <= 500) {
         if (Carrier.length < 1) {
@@ -304,6 +315,15 @@ function run1mode() {
                 Carriermix.num = Carrier.length
             }
         }
+        /*
+        else if (Worker.length < 1) {
+            let Workermix = mySpawn.spawnCreep(body_workers).object;
+            if (Workermix) {
+                Workermix.type = "Worker"
+                Workermix.num = Worker.length
+            }
+        }
+        */
         else if (Redball.length < 2) {
             let Redballmix = mySpawn.spawnCreep(body_redball).object;
             if (Redballmix) {
@@ -318,7 +338,7 @@ function run1mode() {
                 Greenballmix.num = Greenball.length
             }
         }
-        else if (Blueball.length < 4) {
+        else if (Blueball.length < 5) {
             let Blueballmix = mySpawn.spawnCreep(body_blueball).object;
             if (Blueballmix) {
                 Blueballmix.type = "Blueball"
@@ -335,7 +355,7 @@ function run1mode() {
         }
     }
     if (getTicks() > 500) {
-        if (Carrier.length < 2) {
+        if (Carrier.length < 1) {
             let Carriermix = mySpawn.spawnCreep(body_carriers).object;
             if (Carriermix) {
                 Carriermix.type = "Carrier"
@@ -357,10 +377,18 @@ function run1mode() {
     else { mySpawn.warstats = true }
     //敌人相关
     if (SpawmtoEnemycreepsClose) {
-        if (SpawmtoEnemycreepsClose.x > mySpawn.x - 10 && SpawmtoEnemycreepsClose.x < mySpawn.x + 10 &&
-            SpawmtoEnemycreepsClose.y > mySpawn.y - 10 && SpawmtoEnemycreepsClose.y < mySpawn.y + 10) {
+        if (SpawmtoEnemycreepsClose.x > mySpawn.x - 13 && SpawmtoEnemycreepsClose.x < mySpawn.x + 13 &&
+            SpawmtoEnemycreepsClose.y > mySpawn.y - 13 && SpawmtoEnemycreepsClose.y < mySpawn.y + 13) {
             mySpawn.isclosecreeps = true
         }
         else { mySpawn.isclosecreeps = false }
+    }
+}
+
+function createsite(pos, prototype) {
+    let mysite = getObjectsByPrototype(ConstructionSite).find(s => s.my && s.x == pos.x && s.y == pos.y);
+    let mystructure = getObjectsByPrototype(prototype).find(s => s.X == pos.x && s.y == pos.y);
+    if (!mysite && !mystructure) {
+        createConstructionSite(pos, prototype);
     }
 }

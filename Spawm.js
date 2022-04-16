@@ -329,6 +329,7 @@ function run1mode() {
             if (Redballmix) {
                 Redballmix.type = "Redball"
                 Redballmix.num = Redball.length
+                Redballmix.nowaytogo = false
             }
         }
         else if (Greenball.length < 2) {
@@ -377,8 +378,8 @@ function run1mode() {
     else { mySpawn.warstats = true }
     //敌人相关
     if (SpawmtoEnemycreepsClose) {
-        if (SpawmtoEnemycreepsClose.x > mySpawn.x - 13 && SpawmtoEnemycreepsClose.x < mySpawn.x + 13 &&
-            SpawmtoEnemycreepsClose.y > mySpawn.y - 13 && SpawmtoEnemycreepsClose.y < mySpawn.y + 13) {
+        if (SpawmtoEnemycreepsClose.x > mySpawn.x - 10 && SpawmtoEnemycreepsClose.x < mySpawn.x + 10 &&
+            SpawmtoEnemycreepsClose.y > mySpawn.y - 30 && SpawmtoEnemycreepsClose.y < mySpawn.y + 30) {
             mySpawn.isclosecreeps = true
         }
         else { mySpawn.isclosecreeps = false }

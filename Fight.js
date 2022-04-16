@@ -297,39 +297,54 @@ function run1mode() {
     }
 
     //红球逻辑:移动
-    if (!mySpawn.warstats && !mySpawn.isclosecreeps) {
-        for (let redmix of Redball) {
+    for (let redmix of Redball) {
+        let path = findPath(redmix, enemySpawn);
+        if (!mySpawn.warstats && !mySpawn.isclosecreeps) {
             redmix.moveTo(teampos)
         }
-    }
-    else if (!mySpawn.warstats && mySpawn.isclosecreeps) {
-        //找接近的敌爬打
-        for (let redmix of Redball) {
+        else if (!mySpawn.warstats && mySpawn.isclosecreeps) {
+            //找接近的敌爬打
             let closeenemyCreep = findClosestByRange(mySpawn, enemyCreeps)
             redmix.moveTo(closeenemyCreep)
         }
-    }
-    else if (mySpawn.warstats && !mySpawn.isclosecreeps) {
-        //开始推进模式，但是?格之内有敌人就要追，如果已经接近主基地就打基地
-        for (let redmix of Redball) {
+        else if (mySpawn.warstats && !mySpawn.isclosecreeps) {
+            //开始推进模式，但是?格之内有敌人就要追，如果已经接近主基地就打基地
             if (enemyCreeps.length > 0) {
                 let closeenemycreep = findClosestByRange(redmix, enemyCreeps)
                 let rangecloseenemycreep = getRange(redmix, closeenemycreep);
                 let rangecloseenemyspawm = getRange(redmix, enemySpawn);
                 if (rangecloseenemycreep <= 5 && rangecloseenemyspawm > 7) {
                     redmix.moveTo(closeenemycreep)
+                    redmix.nowaytogo = false
                 }
                 else {
-                    redmix.moveTo(enemySpawn)
+                    if (path.length > 0) {
+                        console.log("path有路", path.length)
+                        //console.log("redmix.move(path[0].direction);", redmix.move(path[0].direction))
+                        redmix.moveTo(path[0]);
+                        redmix.nowaytogo = false
+                    }
+                    else {
+                        console.log("path无路", path)
+                        redmix.nowaytogo = true
+                    }
                 }
             }
             else {
-                redmix.moveTo(enemySpawn)
+                if (path.length > 0) {
+                    console.log("path有路", path.length)
+                    // console.log("redmix.move(path[0].direction);", redmix.move(path[0].direction))
+                    redmix.moveTo(path[0]);
+                    redmix.nowaytogo = false
+                }
+                //redmix.moveTo(enemySpawn)
+                else {
+                    console.log("path无路", path)
+                    redmix.nowaytogo = true
+                }
             }
         }
-    }
-    else if (mySpawn.warstats && mySpawn.isclosecreeps) {
-        for (let redmix of Redball) {
+        else if (mySpawn.warstats && mySpawn.isclosecreeps) {
             let closeenemyCreep = findClosestByRange(mySpawn, enemyCreeps)
             let rangecloseenemyspawm = getRange(redmix, enemySpawn);
             if (rangecloseenemyspawm < 40) {
@@ -484,19 +499,33 @@ function run1mode() {
     //蓝球移动逻辑(新版本)
     //跟随离对面基地最近的红球
     for (let blue of Blueball) {
-        if (RedballclosetoenemySpawm) {
-            let redballin3range = findInRange(RedballclosetoenemySpawm, enemyCreeps, 3)
-            let redballiclosetoenemycreeps = findClosestByRange(RedballclosetoenemySpawm, enemyCreeps)
-            if (redballin3range.length > 0) {
-                blue.moveTo(redballiclosetoenemycreeps)
+        if (mySpawn.isclosecreeps) {
+            let closeenemycreep = findClosestByRange(mySpawn, enemyCreeps)
+            let closeengreen = findClosestByRange(blue, Greenball)
+            if (getRange(blue, closeenemycreep) <= 3) {
+                blue.moveTo(closeengreen)
             } else {
-                let bluetoredrange = getRange(blue, RedballclosetoenemySpawm)
-                if (bluetoredrange > 1) {
-                    blue.moveTo(RedballclosetoenemySpawm)
-                }
+                blue.moveTo(closeenemycreep)
             }
-        } else {
-            blue.moveTo(enemySpawn)
+        }
+        else {
+            if (RedballclosetoenemySpawm) {
+                let redballin3range = findInRange(RedballclosetoenemySpawm, enemyCreeps, 3)
+                let redballiclosetoenemycreeps = findClosestByRange(RedballclosetoenemySpawm, enemyCreeps)
+                if (redballin3range.length > 0) {
+                    blue.moveTo(redballiclosetoenemycreeps)
+                } else {
+                    console.log("RedballclosetoenemySpawm.nowaytogo", RedballclosetoenemySpawm.nowaytogo)
+                    if (RedballclosetoenemySpawm.nowaytogo == false || RedballclosetoenemySpawm.nowaytogo == undefined) {
+                        blue.moveTo(RedballclosetoenemySpawm)
+                    }
+                    else if (RedballclosetoenemySpawm.nowaytogo == true) {
+                        blue.moveTo(enemySpawn)
+                    }
+                }
+            } else {
+                blue.moveTo(enemySpawn)
+            }
         }
     }
 

@@ -269,6 +269,7 @@ function run1mode() {
     let enemyCreeps = getObjectsByPrototype(Creep).filter(s => !s.my);
     let myCreeps = getObjectsByPrototype(Creep).filter(s => s.my);
     let enemyStructure = getObjectsByPrototype(Structure).filter(s => !s.my);
+    let enemyConstructionSite = getObjectsByPrototype(ConstructionSite).filter(s => !s.my);
     let enemySpawn = getObjectsByPrototype(StructureSpawn).filter(s => !s.my)[0];
     let enemyExtension = getObjectsByPrototype(StructureExtension).filter(s => !s.my);
     let enemyTower = getObjectsByPrototype(StructureTower).filter(s => !s.my);
@@ -489,11 +490,9 @@ function run1mode() {
 
 
     //突击者逻辑
-    //找建筑打，没建筑就打基地
+    //移动逻辑找建筑打，没建筑就打基地
     for (let redmix of Allinoner) {
-        if (getTicks() <= 800) {
-            redmix.moveTo(teampos)
-        } else {
+        if (enemyConstructionSite.length > 0 || enemyExtension.length > 0 || enemyTower.length > 0 || getTicks() > 600) {
             if (enemyExtension.length > 0) {
                 let closesExtension = findClosestByRange(redmix, enemyExtension)
                 redmix.moveTo(closesExtension)
@@ -503,12 +502,16 @@ function run1mode() {
             } else {
                 redmix.moveTo(enemySpawn)
             }
+        } else {
+            redmix.moveTo(teampos)
         }
     }
 
     //攻击逻辑：在攻击时不治疗，在不攻击时自己治疗
     for (let redmix of Allinoner) {
         let closeenemystru = findClosestByRange(redmix, enemyStructure)
+        let closesExtension = findClosestByRange(redmix, enemyExtension)
+        let closesTower = findClosestByRange(redmix, enemyTower)
         if (enemyCreeps.length > 0 && getRange(redmix, closeenemystru) > 1) {
             let closeenemycreep = findClosestByRange(redmix, enemyCreeps)
             let rangecloseenemycreep = getRange(redmix, closeenemycreep)
@@ -519,11 +522,16 @@ function run1mode() {
                 redmix.heal(redmix)
             }
         } else {
-            if (getRange(redmix, closeenemystru) <= 1) {
-                redmix.attack(closeenemystru)
-            }
-            else {
-                redmix.heal(redmix)
+            if (closesExtension) {
+                redmix.attack(closesExtension)
+            } else if (closesTower) {
+                redmix.attack(closesTower)
+            } else if (enemySpawn) {
+                if (getRange(redmix, enemySpawn) <= 1) {
+                    redmix.attack(enemySpawn)
+                } else {
+                    redmix.heal(redmix)
+                }
             }
         }
     }

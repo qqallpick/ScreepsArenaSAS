@@ -394,7 +394,7 @@ function run1mode() {
     //敌人相关
     if (SpawmtoEnemycreepsClose) {
         if (SpawmtoEnemycreepsClose.x > mySpawn.x - 10 && SpawmtoEnemycreepsClose.x < mySpawn.x + 10 &&
-            SpawmtoEnemycreepsClose.y > mySpawn.y - 25 && SpawmtoEnemycreepsClose.y < mySpawn.y + 25) {
+            SpawmtoEnemycreepsClose.y > mySpawn.y - 40 && SpawmtoEnemycreepsClose.y < mySpawn.y + 40) {
             mySpawn.isclosecreeps = true
         }
         else { mySpawn.isclosecreeps = false }

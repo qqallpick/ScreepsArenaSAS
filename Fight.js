@@ -268,7 +268,10 @@ function run1mode() {
     let source = getObjectsByPrototype(Source).filter(s => s.energy > 0);
     let enemyCreeps = getObjectsByPrototype(Creep).filter(s => !s.my);
     let myCreeps = getObjectsByPrototype(Creep).filter(s => s.my);
+    let enemyStructure = getObjectsByPrototype(Structure).filter(s => !s.my);
     let enemySpawn = getObjectsByPrototype(StructureSpawn).filter(s => !s.my)[0];
+    let enemyExtension = getObjectsByPrototype(StructureExtension).filter(s => !s.my);
+    let enemyTower = getObjectsByPrototype(StructureTower).filter(s => !s.my);
     let Har = getObjectsByPrototype(Creep).filter(s => s.type == "Harvester");
     let Attacker = getObjectsByPrototype(Creep).filter(s => s.type == "Attacker");
     let Carrier = getObjectsByPrototype(Creep).filter(s => s.type == "Carrier");
@@ -319,27 +322,27 @@ function run1mode() {
                 }
                 else {
                     if (path.length > 0) {
-                        console.log("path有路", path.length)
+                        //console.log("path有路", path.length)
                         //console.log("redmix.move(path[0].direction);", redmix.move(path[0].direction))
                         redmix.moveTo(path[0]);
                         redmix.nowaytogo = false
                     }
                     else {
-                        console.log("path无路", path)
+                        //console.log("path无路", path)
                         redmix.nowaytogo = true
                     }
                 }
             }
             else {
                 if (path.length > 0) {
-                    console.log("path有路", path.length)
+                    //console.log("path有路", path.length)
                     // console.log("redmix.move(path[0].direction);", redmix.move(path[0].direction))
                     redmix.moveTo(path[0]);
                     redmix.nowaytogo = false
                 }
                 //redmix.moveTo(enemySpawn)
                 else {
-                    console.log("path无路", path)
+                    //console.log("path无路", path)
                     redmix.nowaytogo = true
                 }
             }
@@ -371,46 +374,6 @@ function run1mode() {
         }
     }
 
-    /*
-        //绿球移动逻辑(旧版本)
-    
-        let greenballOdd = getObjectsByPrototype(Creep).filter(s => s.type == "Greenball" && s.num == 0);
-        let greenballEven = getObjectsByPrototype(Creep).filter(s => s.type == "Greenball" && s.num == 1);
-        let redballOdd = getObjectsByPrototype(Creep).filter(s => s.type == "Redball" && s.num == 0);
-        let redballEven = getObjectsByPrototype(Creep).filter(s => s.type == "Redball" && s.num == 1);
-        let RedballclosetoenemySpawm = findClosestByRange(enemySpawn, Redball)
-        let BlueballclosetoenemySpawm = findClosestByRange(enemySpawn, Blueball)
-        //奇数绿跟奇数红
-        if (redballOdd.length > 0) {
-            for (let greenodd of greenballOdd) {
-                greenodd.moveTo(redballOdd[0])
-            }
-        }
-        else {
-            if (Blueball.length > 0) {
-                for (let greenodd of greenballOdd) {
-                    let closeBlue = findClosestByRange(greenodd, Blueball)
-                    greenodd.moveTo(closeBlue)
-                }
-            }
-        }
-        //偶数绿跟偶数红
-        if (redballEven.length > 0) {
-            for (let greeneven of greenballEven) {
-                greeneven.moveTo(redballEven[0])
-            }
-        }
-        else {
-            if (Blueball.length > 0) {
-                for (let greeneven of greenballEven) {
-                    let closeBlue = findClosestByRange(greeneven, Blueball)
-                    greeneven.moveTo(closeBlue)
-                }
-            }
-        }
-    */
-
-
     //绿球移动逻辑(新版本)
     //跟随离对面基地最近的红球
     let greenballOdd = getObjectsByPrototype(Creep).filter(s => s.type == "Greenball" && s.num == 0);
@@ -431,7 +394,7 @@ function run1mode() {
 
 
     //绿球战斗逻辑
-    //治疗顺序1范围内有红球就不停治疗 2范围内血量百分比最低 3自己有伤先治疗自己 
+    //治疗顺序1范围内有红球就不停治疗 2范围内血量最低 3自己有伤先治疗自己 
     //三格内用range，一格内用heal
     for (let greenball of Greenball) {
         let lowhitsRedball = getObjectsByPrototype(Redball).filter(i => i.hits < i.hitsMax);
@@ -469,40 +432,15 @@ function run1mode() {
             }
         }
     }
-    /*
-        //蓝球移动逻辑(旧版本)
-        //奇数跟奇数//偶数跟偶数
-        let blueballOdd = getObjectsByPrototype(Creep).filter(s => s.type == "Blueball" && s.num % 2 == 1);
-        let blueballEven = getObjectsByPrototype(Creep).filter(s => s.type == "Blueball" && s.num % 2 == 0);
-        //奇数蓝跟奇数绿
-        if (redballOdd.length > 0) {
-            for (let blueodd of blueballOdd) {
-                blueodd.moveTo(redballOdd[0])
-            }
-        } else {
-            for (let blueodd of blueballOdd) {
-                blueodd.moveTo(enemySpawn)
-            }
-        }
-        //偶数蓝跟偶数绿
-        if (redballEven.length > 0) {
-            for (let blueeven of blueballEven) {
-                blueeven.moveTo(redballEven[0])
-            }
-        } else {
-            for (let blueeven of blueballOdd) {
-                blueeven.moveTo(enemySpawn)
-            }
-        }
-    */
 
     //蓝球移动逻辑(新版本)
     //跟随离对面基地最近的红球
+    //红球没了就自己往对面基地走
     for (let blue of Blueball) {
         if (mySpawn.isclosecreeps) {
             let closeenemycreep = findClosestByRange(mySpawn, enemyCreeps)
             let closeengreen = findClosestByRange(blue, Greenball)
-            if (getRange(blue, closeenemycreep) <= 3) {
+            if (getRange(blue, closeenemycreep) < 2) {
                 blue.moveTo(closeengreen)
             } else {
                 blue.moveTo(closeenemycreep)
@@ -515,7 +453,7 @@ function run1mode() {
                 if (redballin3range.length > 0) {
                     blue.moveTo(redballiclosetoenemycreeps)
                 } else {
-                    console.log("RedballclosetoenemySpawm.nowaytogo", RedballclosetoenemySpawm.nowaytogo)
+                    //console.log("RedballclosetoenemySpawm.nowaytogo", RedballclosetoenemySpawm.nowaytogo)
                     if (RedballclosetoenemySpawm.nowaytogo == false || RedballclosetoenemySpawm.nowaytogo == undefined) {
                         blue.moveTo(RedballclosetoenemySpawm)
                     }
@@ -530,7 +468,6 @@ function run1mode() {
     }
 
     //蓝球战斗逻辑
-    //3ranged1mass 
     for (let bullmix of Blueball) {
         let bullin3range = findInRange(bullmix, enemyCreeps, 3)
         let lowesthitsTargetin3range = findlowesthits(bullin3range);
@@ -550,56 +487,29 @@ function run1mode() {
         }
     }
 
-    //防偷家逻辑,一体机守家，攻击离家最近的爬
-    //守家的模式是只在基地附近活动
-    //随时治疗，远程打击
-    //绝对不走沼泽，上下13没有沼泽
 
-    //守家：移动逻辑
-    //逻辑:移动
-    if (!mySpawn.isclosecreeps && enemyCreeps.length > 0) {
-        for (let redmix of Allinoner) {
+    //突击者逻辑
+    //找建筑打，没建筑就打基地
+    for (let redmix of Allinoner) {
+        if (!mySpawn.warstats && !mySpawn.isclosecreeps) {
             redmix.moveTo(teampos)
-        }
-    }
-    else if (mySpawn.isclosecreeps) {
-        //找接近的敌爬打
-        for (let aio of Allinoner) {
-            // let closeenemyCreep = findClosestByRange(mySpawn, enemyCreeps)
-            // redmix.moveTo(closeenemyCreep)
-            let bullin3range = findInRange(aio, enemyCreeps, 3)
-            if (bullin3range.length > 0) {
-                if (aio.flagnum == 1) {
-                    aio.moveTo(pos1point)
-                }
-                else if (aio.flagnum == 2) {
-                    aio.moveTo(pos2point)
-                }
-                if (getRange(aio, pos1point) == 0) {
-                    aio.flagnum = 2
-                }
-                else if (getRange(aio, pos2point) == 0) {
-                    aio.flagnum = 1
-                }
-            }
-            // else if (enemyCreepsin3.length > 0 && enemyCreepsin2.length == 0) {
-            //     //不动
-            // } 
-            else {
-                let closeenemycreep = findClosestByRange(aio, enemyCreeps)
-                aio.moveTo(closeenemycreep)
+        } else {
+            if (enemyExtension.length > 0) {
+                let closesExtension = findClosestByRange(redmix, enemyExtension)
+                redmix.moveTo(closesExtension)
+            } else if (enemyTower.length > 0) {
+                let closesTower = findClosestByRange(redmix, enemyTower)
+                redmix.moveTo(closesTower)
+            } else {
+                redmix.moveTo(enemySpawn)
             }
         }
     }
-    else if (enemyCreeps.length == 0) {
-        //开始推进模式
-        for (let redmix of Allinoner) {
-            redmix.moveTo(enemySpawn)
-        }
-    }
-    //守家，攻击逻辑攻击时不治疗，不攻击时自己治疗
-    /*for (let redmix of Allinoner) {
-        if (enemyCreeps.length > 0) {
+
+    //攻击逻辑：在攻击时不治疗，在不攻击时自己治疗
+    for (let redmix of Allinoner) {
+        let closeenemystru = findClosestByRange(redmix, enemyStructure)
+        if (enemyCreeps.length > 0 && getRange(redmix, closeenemystru) > 1) {
             let closeenemycreep = findClosestByRange(redmix, enemyCreeps)
             let rangecloseenemycreep = getRange(redmix, closeenemycreep)
             if (rangecloseenemycreep <= 1) {
@@ -608,32 +518,18 @@ function run1mode() {
             else {
                 redmix.heal(redmix)
             }
-        }
-    }
-    */
-    //攻击逻辑
-    for (let aio of Allinoner) {
-        let bullin3range = findInRange(aio, enemyCreeps, 3)
-        if (aio.rangedAttack(enemySpawn) == 0) {
-            aio.rangedAttack(enemySpawn)
-        }
-        else if (bullin3range.length > 0) {
-            // let closestTarget = findClosestByRange(aio, enemyCreepsin3);
-            let lowestTarget = findlowesthits(bullin3range);
-            if (lowestTarget) {
-                let range = getRange(aio, lowestTarget);
-                if (range <= 1) {
-                    aio.rangedMassAttack(lowestTarget)
-                }
-                else {
-                    aio.rangedAttack(lowestTarget)
-                }
+        } else {
+            if (getRange(redmix, closeenemystru) <= 1) {
+                redmix.attack(closeenemystru)
+            }
+            else {
+                redmix.heal(redmix)
             }
         }
     }
 }
 
-
+//选择对象数列中血量最低的那个
 function findlowesthits(creeps) {
     let bar = creeps[0];
     for (let i of creeps) {

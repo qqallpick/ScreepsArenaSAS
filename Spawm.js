@@ -282,29 +282,52 @@ function run1mode() {
     let aio_team_false = getObjectsByPrototype(Creep).filter(s => s.type == "Allinoner" && s.team == "false");
     let aio_team_true = getObjectsByPrototype(Creep).filter(s => s.type == "Allinoner" && s.team == "true");
     let SpawmtoEnemycreepsClose = findClosestByRange(mySpawn, enemyCreeps)
-    let Spawmpos = { x: mySpawn.x, y: mySpawn.y }
-    let Spawmposup = { x: mySpawn.x, y: mySpawn.y + 1 }
-    let Spawmposdown = { x: mySpawn.x, y: mySpawn.y - 1 }
+
 
     const body_carriers = [MOVE, CARRY, MOVE, CARRY];
     const body_workers = [MOVE, CARRY, MOVE, WORK];
-    const body_redball = [TOUGH, TOUGH, TOUGH, TOUGH, MOVE, MOVE, MOVE, MOVE, ATTACK, ATTACK, ATTACK, ATTACK, ATTACK, ATTACK, ATTACK, MOVE, MOVE, MOVE];
-    const body_greenball = [MOVE, MOVE, MOVE, MOVE, MOVE, MOVE, HEAL, HEAL];
-    const body_blueball = [MOVE, MOVE, MOVE, MOVE, MOVE, MOVE, RANGED_ATTACK, RANGED_ATTACK, RANGED_ATTACK, RANGED_ATTACK];
-    const body_allinoners = [MOVE, MOVE, MOVE, MOVE, RANGED_ATTACK, RANGED_ATTACK, HEAL, HEAL];
+    const body_redball = [TOUGH, TOUGH, TOUGH, TOUGH, TOUGH, TOUGH, TOUGH, MOVE, MOVE, MOVE, MOVE, MOVE, ATTACK, ATTACK, ATTACK, ATTACK, MOVE, MOVE, MOVE];
+    const body_greenball = [TOUGH, MOVE, MOVE, MOVE, MOVE, HEAL, HEAL, HEAL];
+    const body_blueball = [TOUGH, MOVE, MOVE, MOVE, MOVE, MOVE, RANGED_ATTACK, RANGED_ATTACK, RANGED_ATTACK, RANGED_ATTACK];
+    const body_allinoners = [ATTACK, MOVE, ATTACK, MOVE, MOVE, MOVE, HEAL, HEAL];
+    //主动作战开始时间
+    const fighttime = 500
 
-    const fighttime = 500 //主动作战开始时间
-
-    //基地位置侧
+    //基地位置判断
     mySpawn.rampos = mySpawn.x > 50 ? "右侧" : "左侧"
 
     //建筑相关
-    /*
-    createsite(Spawmpos, StructureRampart)
-    createsite(Spawmposup, StructureRampart)
-    createsite(Spawmposdown, StructureRampart)
-    createsite({ x: 67, y: 46 }, StructureTower)
-    */
+    //在敌人基地下面写个“死”字
+    let markPos1 = [{ x: enemySpawn.x - 3, y: enemySpawn.y + 2 },
+    { x: enemySpawn.x - 2, y: enemySpawn.y + 2 },
+    { x: enemySpawn.x - 1, y: enemySpawn.y + 2 },
+    { x: enemySpawn.x, y: enemySpawn.y + 2 },
+    { x: enemySpawn.x + 1, y: enemySpawn.y + 2 },
+    { x: enemySpawn.x + 2, y: enemySpawn.y + 2 },
+    { x: enemySpawn.x + 3, y: enemySpawn.y + 2 },
+    { x: enemySpawn.x - 2, y: enemySpawn.y + 3 },
+    { x: enemySpawn.x + 1, y: enemySpawn.y + 3 },
+    { x: enemySpawn.x - 3, y: enemySpawn.y + 4 },
+    { x: enemySpawn.x - 1, y: enemySpawn.y + 4 },
+    { x: enemySpawn.x + 1, y: enemySpawn.y + 4 },
+    { x: enemySpawn.x + 3, y: enemySpawn.y + 4 },
+    { x: enemySpawn.x - 4, y: enemySpawn.y + 5 },
+    { x: enemySpawn.x - 2, y: enemySpawn.y + 5 },
+    { x: enemySpawn.x - 1, y: enemySpawn.y + 5 },
+    { x: enemySpawn.x + 1, y: enemySpawn.y + 5 },
+    { x: enemySpawn.x + 2, y: enemySpawn.y + 5 },
+    { x: enemySpawn.x - 1, y: enemySpawn.y + 6 },
+    { x: enemySpawn.x + 1, y: enemySpawn.y + 6 },
+    { x: enemySpawn.x - 2, y: enemySpawn.y + 7 },
+    { x: enemySpawn.x + 1, y: enemySpawn.y + 7 },
+    { x: enemySpawn.x + 4, y: enemySpawn.y + 7 },
+    { x: enemySpawn.x - 3, y: enemySpawn.y + 8 },
+    { x: enemySpawn.x + 2, y: enemySpawn.y + 8 },
+    { x: enemySpawn.x + 3, y: enemySpawn.y + 8 },
+    ]
+    for (let i of markPos1) {
+        createsite(i, StructureRampart)
+    }
 
     //出生顺序管理
     if (getTicks() <= 500) {
@@ -315,21 +338,20 @@ function run1mode() {
                 Carriermix.num = Carrier.length
             }
         }
-        /*
-        else if (Worker.length < 1) {
-            let Workermix = mySpawn.spawnCreep(body_workers).object;
-            if (Workermix) {
-                Workermix.type = "Worker"
-                Workermix.num = Worker.length
-            }
-        }
-        */
         else if (Redball.length < 2) {
             let Redballmix = mySpawn.spawnCreep(body_redball).object;
             if (Redballmix) {
                 Redballmix.type = "Redball"
                 Redballmix.num = Redball.length
                 Redballmix.nowaytogo = false
+            }
+        }
+        else if (Allinoner.length < 1) {
+            let Allinonermix = mySpawn.spawnCreep(body_allinoners).object;
+            if (Allinonermix) {
+                Allinonermix.type = "Allinoner"
+                Allinonermix.num = Allinonermix.length
+                Allinonermix.flagnum = 1
             }
         }
         else if (Greenball.length < 2) {
@@ -346,14 +368,6 @@ function run1mode() {
                 Blueballmix.num = Blueball.length
             }
         }
-        else if (Allinoner.length < 1) {
-            let Allinonermix = mySpawn.spawnCreep(body_allinoners).object;
-            if (Allinonermix) {
-                Allinonermix.type = "Allinoner"
-                Allinonermix.num = Allinonermix.length
-                Allinonermix.flagnum = 1
-            }
-        }
     }
     if (getTicks() > 500) {
         if (Carrier.length < 1) {
@@ -363,11 +377,12 @@ function run1mode() {
                 Carriermix.num = Carrier.length
             }
         }
-        else if (Blueball.length < 8) {
-            let Blueballmix = mySpawn.spawnCreep(body_blueball).object;
-            if (Blueballmix) {
-                Blueballmix.type = "Blueball"
-                Blueballmix.num = Blueball.length
+        else if (Allinoner.length < 8) {
+            let Allinonermix = mySpawn.spawnCreep(body_allinoners).object;
+            if (Allinonermix) {
+                Allinonermix.type = "Allinoner"
+                Allinonermix.num = Allinonermix.length
+                Allinonermix.flagnum = 1
             }
         }
     }
@@ -386,6 +401,7 @@ function run1mode() {
     }
 }
 
+//pos位置上没有建筑或工地，就安装指定建筑工地
 function createsite(pos, prototype) {
     let mysite = getObjectsByPrototype(ConstructionSite).find(s => s.my && s.x == pos.x && s.y == pos.y);
     let mystructure = getObjectsByPrototype(prototype).find(s => s.X == pos.x && s.y == pos.y);

@@ -491,7 +491,7 @@ function run1mode() {
     //突击者逻辑
     //找建筑打，没建筑就打基地
     for (let redmix of Allinoner) {
-        if (!mySpawn.warstats && !mySpawn.isclosecreeps) {
+        if (getTicks() <= 200) {
             redmix.moveTo(teampos)
         } else {
             if (enemyExtension.length > 0) {

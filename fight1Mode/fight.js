@@ -424,6 +424,7 @@ export function fight() {
                 let enemySpawn_redBall_findClosest_enemyCreeps_findClosest = findClosestByRange(enemySpawn_redBall_findClosest, enemyCreeps)
                 if (enemySpawn_redBall_findClosest_enemyCreeps_findIn3Range.length > 0) {
                     if (getRange(blueBallmix, enemySpawn_redBall_findClosest_enemyCreeps_findClosest) <= 2) {
+                        let blueBallmix_greenBall_findClosest = findClosestByRange(blueBallmix, greenBalll)
                         blueBallmix.moveTo(blueBallmix_greenBall_findClosest)
                     }
                     else {
@@ -476,10 +477,10 @@ export function fight() {
                 allinonermix.moveTo(enemySpawn)
             }
         }
-        else if (!mySpawn.warStats) {
+        else if (!mySpawn.warStats && !mySpawn.isCloseCreeps) {
             allinonermix.moveTo(teamPos)
         }
-        else if (mySpawn.warStats) {
+        else if (mySpawn.warStats || mySpawn.isCloseCreeps) {
             if (blueBall.length > 0) {
                 allinonermix.moveTo(enemySpawn_blueBall_findClosest)
             }

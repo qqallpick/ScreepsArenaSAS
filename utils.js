@@ -1,3 +1,4 @@
+//main未使用万能头部，仅作保存用
 //以下是万能头部
 import {
     ConstructionSite,
@@ -253,34 +254,27 @@ Object.assign(global, {
 })
 //以上是万能头部
 
+//功能性函数
 
-
-export function Work() {
-    let mySpawn = getObjectsByPrototype(StructureSpawn).filter(s => s.my)[0];
-    switch (mySpawn.fightmode) {
-        case 1: run1mode();
+//安装建筑
+//如果pos位置上没有建筑或工地，就安装指定建筑工地
+export function createSite(pos, prototype) {
+    let mysite = getObjectsByPrototype(ConstructionSite).find(s => s.my && s.x == pos.x && s.y == pos.y);
+    let mystructure = getObjectsByPrototype(prototype).find(s => s.X == pos.x && s.y == pos.y);
+    if (!mysite && !mystructure) {
+        createConstructionSite(pos, prototype);
     }
 }
 
-function run1mode() {
-    let mySpawn = getObjectsByPrototype(StructureSpawn).filter(s => s.my)[0];
-    let Wroker = getObjectsByPrototype(Creep).filter(s => s.type == "Worker");
-    let Container = getObjectsByPrototype(StructureContainer).filter(s => s.store[RESOURCE_ENERGY] > 0);
-    let closeContainer = findClosestByRange(mySpawn, Container);
-    let myConstructionSites = getObjectsByPrototype(ConstructionSite).filter(i => i.my);
-    if (Wroker.length > 0) {
-        for (let Workermix of Wroker) {
-            if (Workermix.store.getFreeCapacity(RESOURCE_ENERGY)) {
-                let creepcloseContainer = findClosestByRange(Workermix, Container);
-                if (Workermix.withdraw(creepcloseContainer, RESOURCE_ENERGY) == ERR_NOT_IN_RANGE) {
-                    Workermix.moveTo(creepcloseContainer);
-                }
-            } else if (myConstructionSites.length > 0) {
-                let target = Workermix.findClosestByRange(myConstructionSites);
-                if (Workermix.build(target) == ERR_NOT_IN_RANGE) {
-                    Workermix.moveTo(target);
-                }
-            }
+//最低血量
+//选择对象数列中血量最低的那个
+export function findLowestHits(creeps) {
+    let bar = creeps[0];
+    for (let i of creeps) {
+        if (i.hits < bar.hits) {
+            bar = i
         }
     }
+    return bar
 }
+

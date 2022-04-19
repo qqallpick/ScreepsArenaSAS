@@ -253,8 +253,10 @@ Object.assign(global, {
 })
 //以上是万能头部
 
- 
-export function Fightmode() {
+export function fightMode() {
     let mySpawn = getObjectsByPrototype(StructureSpawn).filter(s => s.my)[0];
-    mySpawn.fightmode = 1
+    //选择战斗模式
+    //mySpawn.fightMode = 1，泥头车模式（排名到全服13名）
+    //mySpawn.fightMode = 2，一体机蜂群模式（重构中）
+    mySpawn.fightMode = 1
 }

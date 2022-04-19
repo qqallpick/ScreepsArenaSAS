@@ -253,34 +253,25 @@ Object.assign(global, {
 })
 //以上是万能头部
 
-
-
-export function Carry() {
+export function carry() {
     let mySpawn = getObjectsByPrototype(StructureSpawn).filter(s => s.my)[0];
-    switch (mySpawn.fightmode) {
-        case 1: run1mode();
-    }
-} 
-
-function run1mode() {
-    let mySpawn = getObjectsByPrototype(StructureSpawn).filter(s => s.my)[0];
-    let Carrier = getObjectsByPrototype(Creep).filter(s => s.type == "Carrier");
-    let Container = getObjectsByPrototype(StructureContainer).filter(s => s.store[RESOURCE_ENERGY] > 0);
-    let closeContainer = findClosestByRange(mySpawn, Container);
-    if (Carrier.length > 0) {
-        for (let Carriermix of Carrier) {
-            if (Carriermix.store.getFreeCapacity(RESOURCE_ENERGY)) {
-                if (Carriermix.withdraw(closeContainer, RESOURCE_ENERGY) == ERR_NOT_IN_RANGE) {
-                    Carriermix.moveTo(closeContainer);
+    let carrier = getObjectsByPrototype(Creep).filter(s => s.type == "carrier");
+    let container = getObjectsByPrototype(StructureContainer).filter(s => s.store[RESOURCE_ENERGY] > 0);
+    let mySpawn_Container_findClosest = findClosestByRange(mySpawn, container);
+    //let 掉在地上的能量
+    //还需补全逻辑，5格内的container空了之后，掉在地上的energy一并检索，找距离近的搬运
+    //重构fight2Mode去了，这里修不了
+    if (carrier.length > 0) {
+        for (let carriermix of carrier) {
+            if (carriermix.store.getFreeCapacity(RESOURCE_ENERGY) > 0) {
+                if (carriermix.withdraw(mySpawn_Container_findClosest, RESOURCE_ENERGY) == ERR_NOT_IN_RANGE) {
+                    carriermix.moveTo(mySpawn_Container_findClosest);
                 }
             } else {
-
-                if (Carriermix.transfer(mySpawn, RESOURCE_ENERGY) == ERR_NOT_IN_RANGE) {
-                    Carriermix.moveTo(mySpawn);
+                if (carriermix.transfer(mySpawn, RESOURCE_ENERGY) == ERR_NOT_IN_RANGE) {
+                    carriermix.moveTo(mySpawn);
                 }
             }
         }
     }
-
-
 }

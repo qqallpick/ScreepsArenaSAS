@@ -253,23 +253,30 @@ Object.assign(global, {
 })
 //以上是万能头部
 
-export function Stats() {
+export function stats() {
     let mySpawn = getObjectsByPrototype(StructureSpawn).filter(s => s.my)[0];
-    let Carrier = getObjectsByPrototype(Creep).filter(s => s.type == "Carrier");
-    let Redball = getObjectsByPrototype(Creep).filter(s => s.type == "Redball");
-    let Greenball = getObjectsByPrototype(Creep).filter(s => s.type == "Greenball");
-    let Blueball = getObjectsByPrototype(Creep).filter(s => s.type == "Blueball");
-    let Worker = getObjectsByPrototype(Creep).filter(s => s.type == "Worker");
+    switch (mySpawn.fightMode) {
+        case 1: run1Mode();
+        case 2: run2Mode();
+    }
+}
+
+function run1Mode() {
+    let mySpawn = getObjectsByPrototype(StructureSpawn).filter(s => s.my)[0];
     let enemyCreeps = getObjectsByPrototype(Creep).filter(s => !s.my);
     let myCreeps = getObjectsByPrototype(Creep).filter(s => s.my);
 
     //负责显示状态，具体实现在各个模块里面
-    console.log("游戏时间：", getTicks());
-    console.log("战术模式：", mySpawn.fightmode)
-    console.log("基地位置：", mySpawn.rampos)
-    console.log("战争状态：", mySpawn.warstats)
-    console.log("敌人接近：", mySpawn.isclosecreeps)
+    console.log("游戏时间：", getTicks(),"ticks");
+    console.log("战术模式：", mySpawn.fightMode)
+    console.log("基地位置：", mySpawn.ramPos)
+    console.log("战争状态：", mySpawn.warStats)
+    console.log("敌人接近：", mySpawn.isCloseCreeps)
     console.log("我方数量：", myCreeps.length)
     console.log("敌人数量：", enemyCreeps.length)
+
+}
+
+function run2Mode() {
 
 }

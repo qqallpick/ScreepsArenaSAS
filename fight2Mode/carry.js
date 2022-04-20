@@ -253,10 +253,25 @@ Object.assign(global, {
 })
 //以上是万能头部
 
-export function fightMode() {
+export function carry() {
     let mySpawn = getObjectsByPrototype(StructureSpawn).filter(s => s.my)[0];
-    //选择战斗模式
-    //mySpawn.fightMode = 1，泥头车模式（排名到全服13名）
-    //mySpawn.fightMode = 2，一体机蜂群模式（重构中）
-    mySpawn.fightMode = 2
+    let carrier = getObjectsByPrototype(Creep).filter(s => s.type == "carrier");
+    let container = getObjectsByPrototype(StructureContainer).filter(s => s.store[RESOURCE_ENERGY] > 0);
+    let mySpawn_Container_findClosest = findClosestByRange(mySpawn, container);
+    //let 掉在地上的能量
+    //还需补全逻辑，5格内的container空了之后，掉在地上的energy一并检索，找距离近的搬运
+    //重构fight2Mode去了，这里修不了
+    if (carrier.length > 0) {
+        for (let carriermix of carrier) {
+            if (carriermix.store.getFreeCapacity(RESOURCE_ENERGY) > 0) {
+                if (carriermix.withdraw(mySpawn_Container_findClosest, RESOURCE_ENERGY) == ERR_NOT_IN_RANGE) {
+                    carriermix.moveTo(mySpawn_Container_findClosest);
+                }
+            } else {
+                if (carriermix.transfer(mySpawn, RESOURCE_ENERGY) == ERR_NOT_IN_RANGE) {
+                    carriermix.moveTo(mySpawn);
+                }
+            }
+        }
+    }
 }

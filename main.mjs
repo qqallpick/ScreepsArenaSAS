@@ -1,12 +1,3 @@
-/* 
-**作者：马作的卢飞快
-**邮箱：allpick@qq.com
-**说明：开源本代码
-**如果在本代码基础上二次开发则需公开所有代码
-**仅使用部分代码也必须公开所有代码
-**授权所有未改动代码的使用
-*/
-
 import { fightMode } from './fightMode';
 import { runAction } from './runAction';
 import { stats } from './stats';

@@ -281,23 +281,81 @@ export function fight() {
     }
 
     //一体机逻辑
-    //移动逻辑
-    //出门直奔对面基地，遇到敌人追一下，发现追不上就再直奔基地
+    // //移动逻辑
+    // //出门直奔对面基地，遇到敌人追一下，发现追不上就再直奔基地(这个版本不行哦)
+    // for (let allinonermix of allinoner) {
+    //     if (!mySpawn.warStats && !mySpawn.isCloseCreeps) {
+    //         allinonermix.moveTo(teamPos)
+    //     }
+    //     else if (mySpawn.warStats && !mySpawn.isCloseCreeps) {
+    //         if (enemyCreeps.length > 0) {
+    //             let allinonermix_enemyCreeps_findClosest = findClosestByRange(allinonermix, enemyCreeps)
+    //             if (getRange(allinonermix, allinonermix_enemyCreeps_findClosest) == 4 &&
+    //                 getRange(allinonermix, enemySpawn) > 1) {
+    //                 allinonermix.moveTo(allinonermix_enemyCreeps_findClosest)
+    //             }
+    //             else if (getRange(allinonermix, allinonermix_enemyCreeps_findClosest) < 3 &&
+    //                 getRange(allinonermix, enemySpawn) > 1) {
+    //                 let allinonermix_allinonermix_enemyCreeps_findClosest_findPath = findPath(allinonermix, allinonermix_enemyCreeps_findClosest, { flee: true, range: 10 });
+    //                 //console.log(allinonermix_allinonermix_enemyCreeps_findClosest_findPath)
+    //                 allinonermix.moveTo(allinonermix_allinonermix_enemyCreeps_findClosest_findPath[0])
+    //                 //console.log(allinonermix.moveTo(allinonermix_allinonermix_enemyCreeps_findClosest_findPath[0]))
+    //             }
+    //             else {
+    //                 allinonermix.moveTo(enemySpawn)
+    //             }
+    //         }
+    //         else {
+    //             allinonermix.moveTo(enemySpawn)
+    //         }
+    //     }
+    //     else if (!mySpawn.warStats && mySpawn.isCloseCreeps) {
+    //         if (getRange(allinonermix, mySpawn_enemyCreeps_findClosest) >= 4) {
+    //             allinonermix.moveTo(mySpawn_enemyCreeps_findClosest)
+    //         }
+    //         else if (getRange(allinonermix, mySpawn_enemyCreeps_findClosest) <= 3) {
+    //             let allinonermix_mySpawn_enemyCreeps_findClosest_findPath = findPath(allinonermix, mySpawn_enemyCreeps_findClosest, { flee: true, range: 10 });
+    //             //console.log(allinonermix_allinonermix_enemyCreeps_findClosest_findPath)
+    //             allinonermix.moveTo(allinonermix_mySpawn_enemyCreeps_findClosest_findPath[0])
+    //             //console.log(allinonermix.moveTo(allinonermix_allinonermix_enemyCreeps_findClosest_findPath[0]))
+    //         }
+    //     }
+    //     else if (mySpawn.warStats && mySpawn.isCloseCreeps) {
+    //         //有人偷家就全家回防
+    //         // let mySpawn_allinoner_findClosest = findClosestByRange(mySpawn, allinoner)
+    //         // mySpawn_allinoner_findClosest.moveTo(mySpawn_enemyCreeps_findClosest)
+    //         if (getRange(allinonermix, mySpawn_enemyCreeps_findClosest) >= 4) {
+    //             allinonermix.moveTo(mySpawn_enemyCreeps_findClosest)
+    //         }
+    //         else if (getRange(allinonermix, mySpawn_enemyCreeps_findClosest) <= 3) {
+    //             let allinonermix_mySpawn_enemyCreeps_findClosest_findPath = findPath(allinonermix, mySpawn_enemyCreeps_findClosest, { flee: true, range: 10 });
+    //             //console.log(allinonermix_allinonermix_enemyCreeps_findClosest_findPath)
+    //             allinonermix.moveTo(allinonermix_mySpawn_enemyCreeps_findClosest_findPath[0])
+    //             //console.log(allinonermix.moveTo(allinonermix_allinonermix_enemyCreeps_findClosest_findPath[0]))
+    //         }
+    //     }
+    // }
+
+    //移动逻辑（新版本）
+    //出门直奔对面离我基地最近的敌人，杀光了再推对面基地
     for (let allinonermix of allinoner) {
-        if (!mySpawn.warStats) {
-            allinonermix.moveTo(teamPos)
-        }
-        else if (mySpawn.warStats) {
-            if (enemyCreeps) {
+        if (true) {
+            if (enemyCreeps.length > 0) {
                 let allinonermix_enemyCreeps_findClosest = findClosestByRange(allinonermix, enemyCreeps)
-                if (getRange(allinonermix, allinonermix_enemyCreeps_findClosest) == 4) {
-                    allinonermix.moveTo(allinonermix_enemyCreeps_findClosest)
+                if (getRange(allinonermix, allinonermix_enemyCreeps_findClosest) >= 4 &&
+                    getRange(allinonermix, enemySpawn) > 1) {
+                    allinonermix.moveTo(mySpawn_enemyCreeps_findClosest)
                 }
-                else if (getRange(allinonermix, allinonermix_enemyCreeps_findClosest) <= 3) {
-                    let allinonermix_allinonermix_enemyCreeps_findClosest_findPath = findPath(allinonermix, allinonermix_enemyCreeps_findClosest, { flee: true, range: 4 });
-                    console.log(allinonermix_allinonermix_enemyCreeps_findClosest_findPath)
+                else if (getRange(allinonermix, allinonermix_enemyCreeps_findClosest) == 3 &&
+                    getRange(allinonermix, enemySpawn) > 1) {
+                   
+                }
+                else if (getRange(allinonermix, allinonermix_enemyCreeps_findClosest) < 3 &&
+                    getRange(allinonermix, enemySpawn) > 1) {
+                    let allinonermix_allinonermix_enemyCreeps_findClosest_findPath = findPath(allinonermix, allinonermix_enemyCreeps_findClosest, { flee: true, range: 5 });
+                    //console.log(allinonermix_allinonermix_enemyCreeps_findClosest_findPath)
                     allinonermix.moveTo(allinonermix_allinonermix_enemyCreeps_findClosest_findPath[0])
-                    console.log(allinonermix.moveTo(allinonermix_allinonermix_enemyCreeps_findClosest_findPath[0]))
+                    //console.log(allinonermix.moveTo(allinonermix_allinonermix_enemyCreeps_findClosest_findPath[0]))
                 }
                 else {
                     allinonermix.moveTo(enemySpawn)
@@ -307,18 +365,21 @@ export function fight() {
                 allinonermix.moveTo(enemySpawn)
             }
         }
-
     }
 
     //战斗逻辑
     for (let allinonermix of allinoner) {
-        if (enemyCreeps && (enemySpawn || enemyExtension || enemyTower)) {
+        if (enemyCreeps.length > 0 && (enemySpawn || enemyExtension.length > 0 || enemyTower.length > 0)) {
             //有敌人有建筑的情况
             //优先打范围内的敌人
             //没有敌人了就打建筑
             //在打敌人的时候可以考虑Heal自己或者Heal1格内的友军
             let allinonermix_enemyCreeps_findClosest = findClosestByRange(allinonermix, enemyCreeps)
-            if (getRange(allinonermix, allinonermix_enemyCreeps_findClosest) <= 3 && getRange(allinonermix, allinonermix_enemyCreeps_findClosest) >= 2) {
+            let allinonermix_enemyTower_findClosest = findClosestByRange(allinonermix, enemyTower)
+            let allinonermix_enemyExtension_findClosest = findClosestByRange(allinonermix, enemyExtension)
+            if (getRange(allinonermix, allinonermix_enemyCreeps_findClosest) <= 3 &&
+                getRange(allinonermix, allinonermix_enemyCreeps_findClosest) >= 2 &&
+                getRange(allinonermix, enemySpawn) > 1) {
                 allinonermix.rangedAttack(allinonermix_enemyCreeps_findClosest)
                 //攻击的同时判断有没有需要Heal的友军，没有的话就Heal自己
                 let allinonermix_myCreepsInjured_findIn1Range = findInRange(allinonermix, myCreepsInjured, 1)
@@ -330,7 +391,8 @@ export function fight() {
                     allinonermix.heal(allinonermix)
                 }
             }
-            else if (getRange(allinonermix, allinonermix_enemyCreeps_findClosest) <= 1) {
+            else if (getRange(allinonermix, allinonermix_enemyCreeps_findClosest) <= 1 &&
+                getRange(allinonermix, enemySpawn) > 1) {
                 allinonermix.rangedMassAttack(allinonermix_enemyCreeps_findClosest)
                 //攻击的同时判断有没有需要Heal的友军，没有的话就Heal自己
                 let allinonermix_myCreepsInjured_findIn1Range = findInRange(allinonermix, myCreepsInjured, 1)
@@ -342,12 +404,47 @@ export function fight() {
                     allinonermix.heal(allinonermix)
                 }
             }
-            else if (allinonermix.rangedAttack(enemyTower) == 0 ||
-                allinonermix.rangedAttack(enemySpawn) == 0 ||
-                allinonermix.rangedAttack(enemyExtension) == 0) {
-                allinonermix.rangedAttack(enemyTower)
-                allinonermix.rangedAttack(enemySpawn)
-                allinonermix.rangedAttack(enemyExtension)
+            else if (enemyTower.length > 0) {
+                if (getRange(allinonermix, allinonermix_enemyTower_findClosest) <= 1) {
+                    allinonermix.rangedMassAttack()
+                }
+                else if (getRange(allinonermix, allinonermix_enemyTower_findClosest) <= 3) {
+                    allinonermix.rangedAttack(allinonermix_enemyTower_findClosest)
+                }
+                //攻击的同时判断有没有需要Heal的友军，没有的话就Heal自己
+                let allinonermix_myCreepsInjured_findIn1Range = findInRange(allinonermix, myCreepsInjured, 1)
+                if (allinonermix_myCreepsInjured_findIn1Range.length > 0) {
+                    let allinonermix_myCreepsInjured_findIn1Range_findLowestHits = findLowestHits(allinonermix_myCreepsInjured_findIn1Range)
+                    allinonermix.heal(allinonermix_myCreepsInjured_findIn1Range_findLowestHits)
+                }
+                else {
+                    allinonermix.heal(allinonermix)
+                }
+            }
+            else if (getRange(allinonermix, enemySpawn) <= 3) {
+                if (getRange(allinonermix, enemySpawn) <= 1) {
+                    allinonermix.rangedMassAttack()
+                }
+                else if (getRange(allinonermix, enemySpawn) <= 3) {
+                    allinonermix.rangedAttack(enemySpawn)
+                }
+                //攻击的同时判断有没有需要Heal的友军，没有的话就Heal自己
+                let allinonermix_myCreepsInjured_findIn1Range = findInRange(allinonermix, myCreepsInjured, 1)
+                if (allinonermix_myCreepsInjured_findIn1Range.length > 0) {
+                    let allinonermix_myCreepsInjured_findIn1Range_findLowestHits = findLowestHits(allinonermix_myCreepsInjured_findIn1Range)
+                    allinonermix.heal(allinonermix_myCreepsInjured_findIn1Range_findLowestHits)
+                }
+                else {
+                    allinonermix.heal(allinonermix)
+                }
+            }
+            else if (enemyExtension.length > 0) {
+                if (getRange(allinonermix, allinonermix_enemyExtension_findClosest) <= 1) {
+                    allinonermix.rangedMassAttack()
+                }
+                else if (getRange(allinonermix, allinonermix_enemyExtension_findClosest) <= 3) {
+                    allinonermix.rangedAttack(allinonermix_enemyExtension_findClosest)
+                }
                 //攻击的同时判断有没有需要Heal的友军，没有的话就Heal自己
                 let allinonermix_myCreepsInjured_findIn1Range = findInRange(allinonermix, myCreepsInjured, 1)
                 if (allinonermix_myCreepsInjured_findIn1Range.length > 0) {
@@ -380,10 +477,28 @@ export function fight() {
         else {
             //没有敌人的情况（不会出现只有敌人没有建筑的情况呀^_^）,直接打基地
             //也不用考虑治疗
-            allinonermix.rangedAttack(enemySpawn)
+            if (getRange(allinonermix, enemySpawn) <= 3) {
+                if (getRange(allinonermix, enemySpawn) <= 1) {
+                    allinonermix.rangedMassAttack()
+                }
+                else if (getRange(allinonermix, enemySpawn) <= 3) {
+                    allinonermix.rangedAttack(enemySpawn)
+                }
+                //攻击的同时判断有没有需要Heal的友军，没有的话就Heal自己
+                let allinonermix_myCreepsInjured_findIn1Range = findInRange(allinonermix, myCreepsInjured, 1)
+                if (allinonermix_myCreepsInjured_findIn1Range.length > 0) {
+                    let allinonermix_myCreepsInjured_findIn1Range_findLowestHits = findLowestHits(allinonermix_myCreepsInjured_findIn1Range)
+                    allinonermix.heal(allinonermix_myCreepsInjured_findIn1Range_findLowestHits)
+                }
+                else {
+                    allinonermix.heal(allinonermix)
+                }
+            }
         }
     }
+
 }
+
 
 
 

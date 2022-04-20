@@ -267,7 +267,8 @@ function run1Mode() {
     let myCreeps = getObjectsByPrototype(Creep).filter(s => s.my);
 
     //负责显示状态，具体实现在各个模块里面
-    console.log("游戏时间：", getTicks(), "ticks");
+    console.log("马作的卢飞快")
+    console.log("游戏时间：", getTicks(), "ticks")
     console.log("战术模式：", mySpawn.fightMode)
     console.log("基地位置：", mySpawn.ramPos)
     console.log("战争状态：", mySpawn.warStats)
@@ -283,6 +284,7 @@ function run2Mode() {
     let myCreeps = getObjectsByPrototype(Creep).filter(s => s.my);
 
     //负责显示状态，具体实现在各个模块里面
+    console.log("马作的卢飞快")
     console.log("游戏时间：", getTicks(), "ticks");
     console.log("战术模式：", mySpawn.fightMode)
     console.log("基地位置：", mySpawn.ramPos)

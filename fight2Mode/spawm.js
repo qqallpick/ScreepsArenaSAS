@@ -253,6 +253,7 @@ Object.assign(global, {
 })
 //以上是万能头部
 
+import { Visual } from 'game/visual'
 import { createSite } from '../utils';
 
 export function spawm() {
@@ -265,10 +266,10 @@ export function spawm() {
 
     //体型数据
     const body_carriers = [MOVE, CARRY, MOVE, CARRY];
-    const body_allinoners = [MOVE, MOVE, MOVE, MOVE, MOVE, MOVE, RANGED_ATTACK, RANGED_ATTACK, RANGED_ATTACK, HEAL];
+    const body_allinoners = [MOVE, MOVE, MOVE, RANGED_ATTACK, RANGED_ATTACK, MOVE, MOVE, MOVE, RANGED_ATTACK, HEAL];
 
     //主动作战开始时间
-    const fightTime = 270
+    const fightTime = 180
 
     //基地位置判断
     mySpawn.ramPos = mySpawn.x > 50 ? "右侧" : "左侧"
@@ -308,14 +309,14 @@ export function spawm() {
 
     //出生顺序管理
     if (getTicks() <= 500) {
-        if (carrier.length < 1) {
+        if (carrier.length < 2) {
             let carriermix = mySpawn.spawnCreep(body_carriers).object;
             if (carriermix) {
                 carriermix.type = "carrier"
                 carriermix.num = carrier.length
             }
         }
-        else if (allinoner.length < 8) {
+        else if (allinoner.length < 10) {
             let allinonermix = mySpawn.spawnCreep(body_allinoners).object;
             if (allinonermix) {
                 allinonermix.type = "allinoner"
@@ -344,12 +345,19 @@ export function spawm() {
 
     //战争状态管理
     //时间相关
-    if (getTicks() < fightTime) { mySpawn.warStats = false }
-    else { mySpawn.warStats = true }
+    if (getTicks() < fightTime) {
+        mySpawn.warStats = false
+    }
+    else {
+        mySpawn.warStats = true
+    }
     //敌人相关
+    new Visual().rect({ x: mySpawn.x - 10, y: mySpawn.y - 17 }, 20, 34, { opacity: 0.1 });
     if (mySpawm_enemyCreeps_findClosest) {
-        if (mySpawm_enemyCreeps_findClosest.x > mySpawn.x - 10 && mySpawm_enemyCreeps_findClosest.x < mySpawn.x + 10 &&
-            mySpawm_enemyCreeps_findClosest.y > mySpawn.y - 40 && mySpawm_enemyCreeps_findClosest.y < mySpawn.y + 40) {
+        if (mySpawm_enemyCreeps_findClosest.x >= mySpawn.x - 10 &&
+            mySpawm_enemyCreeps_findClosest.x <= mySpawn.x + 10 &&
+            mySpawm_enemyCreeps_findClosest.y >= mySpawn.y - 17 &&
+            mySpawm_enemyCreeps_findClosest.y <= mySpawn.y + 17) {
             mySpawn.isCloseCreeps = true
         }
         else { mySpawn.isCloseCreeps = false }

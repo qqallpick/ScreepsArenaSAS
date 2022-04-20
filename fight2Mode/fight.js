@@ -284,10 +284,10 @@ export function fight() {
     //移动逻辑
     //出门直奔对面基地，遇到敌人追一下，发现追不上就再直奔基地
     for (let allinonermix of allinoner) {
-        if (getTicks() <= 270) {
+        if (!mySpawn.warStats) {
             allinonermix.moveTo(teamPos)
         }
-        else if (getTicks() > 270) {
+        else if (mySpawn.warStats) {
             if (enemyCreeps) {
                 let allinonermix_enemyCreeps_findClosest = findClosestByRange(allinonermix, enemyCreeps)
                 if (getRange(allinonermix, allinonermix_enemyCreeps_findClosest) == 4) {

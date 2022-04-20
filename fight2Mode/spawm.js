@@ -268,7 +268,7 @@ export function spawm() {
     const body_allinoners = [MOVE, MOVE, MOVE, MOVE, MOVE, MOVE, RANGED_ATTACK, RANGED_ATTACK, RANGED_ATTACK, HEAL];
 
     //主动作战开始时间
-    const fightTime = 500
+    const fightTime = 270
 
     //基地位置判断
     mySpawn.ramPos = mySpawn.x > 50 ? "右侧" : "左侧"

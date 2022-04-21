@@ -4,6 +4,7 @@ import { fight as fight1 } from './fight1Mode/fight';
 import { spawm as spawm2 } from './fight2Mode/spawm';
 import { carry as carry2 } from './fight2Mode/carry';
 import { fight as fight2 } from './fight2Mode/fight';
+import { visual as visual2 } from './fight2Mode/visual';
 
 export function runAction() {
     let mySpawn = getObjectsByPrototype(StructureSpawn).filter(s => s.my)[0];
@@ -23,4 +24,5 @@ function run2Mode() {
     spawm2();
     carry2();
     fight2();
+    visual2();
 }

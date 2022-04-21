@@ -278,3 +278,79 @@ export function findLowestHits(creeps) {
     return bar
 }
 
+/**
+*增加障碍物cost
+*@param {*} costmatrix
+*@returns
+*/
+export function setobstacle(costmatrix) {
+    let obstaclePrototypes = [
+        StructureSpawn,
+        StructureExtension,
+        StructureTower,
+        StructureWall,
+    ];
+    let obstacleEnemyPrototypes = [StructureRampart];
+    let obstacleEnemyPrototypesCreep = [Creep]
+    for (const prototype of obstaclePrototypes) {
+        let obstacles = getObjectsByPrototype(prototype).filter(
+            (p) => p.exists
+        );
+        for (const obstacle of obstacles) {
+            costmatrix.set(obstacle.x, obstacle.y, 255);
+        }
+    }
+    for (const prototype of obstacleEnemyPrototypes) {
+        let obstacles = getObjectsByPrototype(prototype).filter(
+            (p) => p.exists & !p.my  //我方单位不算255
+        );
+        for (const obstacle of obstacles) {
+            costmatrix.set(obstacle.x, obstacle.y, 255);
+        }
+
+    }
+    for (const prototype of obstacleEnemyPrototypesCreep) {
+        let obstacles = getObjectsByPrototype(prototype).filter(
+            (p) => p.exists & !p.my  //我方单位不算255
+        );
+        for (const obstacle of obstacles) {
+            costmatrix.set(obstacle.x, obstacle.y, 255);
+            //costmatrix.set(obstacle.x + 1, obstacle.y, 255);
+            // costmatrix.set(obstacle.x + 2, obstacle.y, 255);
+            //costmatrix.set(obstacle.x - 1, obstacle.y, 255);
+            // costmatrix.set(obstacle.x - 2, obstacle.y, 255);
+            //costmatrix.set(obstacle.x + 1, obstacle.y + 1, 255);
+            // costmatrix.set(obstacle.x + 2, obstacle.y + 1, 255);
+            //costmatrix.set(obstacle.x - 1, obstacle.y + 1, 255);
+            // costmatrix.set(obstacle.x - 2, obstacle.y + 1, 255);
+            // costmatrix.set(obstacle.x + 1, obstacle.y + 2, 255);
+            // costmatrix.set(obstacle.x + 2, obstacle.y + 2, 255);
+            // costmatrix.set(obstacle.x - 1, obstacle.y + 2, 255);
+            // costmatrix.set(obstacle.x - 2, obstacle.y + 2, 255);
+            //costmatrix.set(obstacle.x + 1, obstacle.y - 1, 255);
+            // costmatrix.set(obstacle.x + 2, obstacle.y - 1, 255);
+            //costmatrix.set(obstacle.x - 1, obstacle.y - 1, 255);
+            // costmatrix.set(obstacle.x - 2, obstacle.y - 1, 255);
+            // costmatrix.set(obstacle.x + 1, obstacle.y - 2, 255);
+            // costmatrix.set(obstacle.x + 2, obstacle.y - 2, 255);
+            // costmatrix.set(obstacle.x - 1, obstacle.y - 2, 255);
+            // costmatrix.set(obstacle.x - 2, obstacle.y - 2, 255);
+            //costmatrix.set(obstacle.x, obstacle.y + 1, 255);
+            //costmatrix.set(obstacle.x, obstacle.y - 1, 255);
+            // costmatrix.set(obstacle.x, obstacle.y + 2, 255);
+            // costmatrix.set(obstacle.x, obstacle.y - 2, 255);
+        }
+    }
+    return costmatrix;
+}
+
+//对象A是否和对象集合B中的对象紧靠
+export function isNearto(A, B) {
+    let A_B_findClosest = findClosestByRange(A, B)
+    if (getRange(A, A_B_findClosest) == 1) {
+        return true
+    }
+    else {
+        return false
+    }
+}

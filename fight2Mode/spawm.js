@@ -253,7 +253,6 @@ Object.assign(global, {
 })
 //以上是万能头部
 
-import { Visual } from 'game/visual'
 import { createSite } from '../utils';
 
 export function spawm() {
@@ -266,10 +265,11 @@ export function spawm() {
 
     //体型数据
     const body_carriers = [MOVE, CARRY, MOVE, CARRY];
-    const body_allinoners = [MOVE, MOVE, MOVE, RANGED_ATTACK, RANGED_ATTACK, MOVE, MOVE, MOVE, RANGED_ATTACK, HEAL];
-
+    const body_allinoners = [MOVE, MOVE, MOVE, MOVE, MOVE, MOVE, RANGED_ATTACK, RANGED_ATTACK, RANGED_ATTACK, HEAL];
+    const body_allinonersII = [MOVE, MOVE, MOVE, MOVE, MOVE, MOVE, MOVE, MOVE, MOVE, MOVE, RANGED_ATTACK, HEAL];
+    //const body_allinoners = [RANGED_ATTACK, MOVE, MOVE, MOVE, MOVE, MOVE, MOVE, RANGED_ATTACK, HEAL];
     //主动作战开始时间
-    const fightTime = 180
+    const fightTime = 260
 
     //基地位置判断
     mySpawn.ramPos = mySpawn.x > 50 ? "右侧" : "左侧"
@@ -322,23 +322,27 @@ export function spawm() {
                 allinonermix.type = "allinoner"
                 allinonermix.num = allinonermix.length
                 allinonermix.flagNum = 1
+                allinonermix.teamLeader = false
+                allinonermix.teamNow = false
             }
         }
     }
     if (getTicks() > 500) {
-        if (carrier.length < 1) {
+        if (carrier.length < 2) {
             let carriermix = mySpawn.spawnCreep(body_carriers).object;
             if (carriermix) {
                 carriermix.type = "carrier"
                 carriermix.num = carrier.length
             }
         }
-        else if (allinoner.length < 8) {
+        else if (allinoner.length < 10) {
             let allinonermix = mySpawn.spawnCreep(body_allinoners).object;
             if (allinonermix) {
                 allinonermix.type = "allinoner"
                 allinonermix.num = allinonermix.length
                 allinonermix.flagNum = 1
+                allinonermix.teamLeader = false
+                allinonermix.teamNow = false
             }
         }
     }
@@ -352,7 +356,6 @@ export function spawm() {
         mySpawn.warStats = true
     }
     //敌人相关
-    new Visual().rect({ x: mySpawn.x - 10, y: mySpawn.y - 17 }, 20, 34, { opacity: 0.1 });
     if (mySpawm_enemyCreeps_findClosest) {
         if (mySpawm_enemyCreeps_findClosest.x >= mySpawn.x - 10 &&
             mySpawm_enemyCreeps_findClosest.x <= mySpawn.x + 10 &&

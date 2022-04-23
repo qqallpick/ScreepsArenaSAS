@@ -261,21 +261,50 @@ export function carry() {
     let myExtension = getObjectsByPrototype(StructureExtension).filter(s => s.my && s.store.getFreeCapacity(RESOURCE_ENERGY) > 0);
     //let 掉在地上的能量
     //还需补全逻辑，5格内的container空了之后，掉在地上的energy一并检索，找距离近的搬运
-    if (carrier.length > 0) {
-        for (let carriermix of carrier) {
-            if (carriermix.store.getFreeCapacity(RESOURCE_ENERGY) > 0) {
-                if (carriermix.withdraw(mySpawn_Container_findClosest, RESOURCE_ENERGY) == ERR_NOT_IN_RANGE) {
-                    carriermix.moveTo(mySpawn_Container_findClosest);
-                }
-            } else {
-                let carriermix_myExtension_findClosest = findClosestByRange(carriermix, myExtension)
-                if (carriermix.transfer(carriermix_myExtension_findClosest, RESOURCE_ENERGY) == ERR_NOT_IN_RANGE) {
-                    carriermix.moveTo(carriermix_myExtension_findClosest);
-                }
-                else if (carriermix.transfer(mySpawn, RESOURCE_ENERGY) == ERR_NOT_IN_RANGE) {
-                    carriermix.moveTo(mySpawn);
+    if (getTicks() <= 240) {
+        if (carrier.length > 0) {
+            for (let carriermix of carrier) {
+                if (carriermix.store.getFreeCapacity(RESOURCE_ENERGY) > 0) {
+                    let carriermix_Container_findClosest = findClosestByRange(carriermix, container);
+                    if (carriermix.withdraw(carriermix_Container_findClosest, RESOURCE_ENERGY) == ERR_NOT_IN_RANGE) {
+                        carriermix.moveTo(carriermix_Container_findClosest);
+                    }
+                } else {
+                    let carriermix_myExtension_findClosest = findClosestByRange(carriermix, myExtension)
+                    if (carriermix.transfer(carriermix_myExtension_findClosest, RESOURCE_ENERGY) == ERR_NOT_IN_RANGE) {
+                        carriermix.moveTo(carriermix_myExtension_findClosest);
+                    }
+                    else if (carriermix.transfer(mySpawn, RESOURCE_ENERGY) == ERR_NOT_IN_RANGE) {
+                        carriermix.moveTo(mySpawn);
+                    }
                 }
             }
+        }
+    }
+    else if (getTicks() > 240) {
+        if (carrier.length > 0) {
+            for (let carriermix of carrier) {
+                if (carriermix.store.getFreeCapacity(RESOURCE_ENERGY) > 0) {
+                    let carriermix_Container_findClosest = findClosestByRange(carriermix, container);
+                    let resource = getObjectsByPrototype(Resource).filter(i => i.resourceType == RESOURCE_ENERGY)
+                    let carriermix_resource_findClosest = findClosestByRange(carriermix, resource);
+                    if (carriermix.pickup(carriermix_resource_findClosest, RESOURCE_ENERGY) == ERR_NOT_IN_RANGE) {
+                        carriermix.moveTo(carriermix_resource_findClosest);
+                    }
+                    else if (carriermix.withdraw(carriermix_Container_findClosest, RESOURCE_ENERGY) == ERR_NOT_IN_RANGE) {
+                        carriermix.moveTo(carriermix_Container_findClosest);
+                    }
+                } else {
+                    let carriermix_myExtension_findClosest = findClosestByRange(carriermix, myExtension)
+                    if (carriermix.transfer(carriermix_myExtension_findClosest, RESOURCE_ENERGY) == ERR_NOT_IN_RANGE) {
+                        carriermix.moveTo(carriermix_myExtension_findClosest);
+                    }
+                    else if (carriermix.transfer(mySpawn, RESOURCE_ENERGY) == ERR_NOT_IN_RANGE) {
+                        carriermix.moveTo(mySpawn);
+                    }
+                }
+            }
+
         }
     }
 }

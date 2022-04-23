@@ -7,6 +7,7 @@ import { fight as fight2 } from './fight2Mode/fight';
 import { visual as visual2 } from './fight3Mode/visual';
 import { spawm as spawm3 } from './fight3Mode/spawm';
 import { carry as carry3 } from './fight3Mode/carry';
+import { drop as drop3 } from './fight3Mode/drop';
 import { work as work3 } from './fight3Mode/work';
 import { fight as fight3 } from './fight3Mode/fight';
 import { visual as visual3 } from './fight3Mode/visual';
@@ -39,6 +40,7 @@ function run2Mode() {
 function run3Mode() {
     spawm3();
     carry3();
+    drop3();
     work3();
     fight3();
     visual3();

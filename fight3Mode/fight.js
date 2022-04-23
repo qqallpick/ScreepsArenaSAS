@@ -284,13 +284,21 @@ export function fight() {
     // const pos2point = { x: (mySpawn.x - 3), y: (mySpawn.y - 12) }
     //集结点设置
     if (mySpawn.ramPos == "左侧") {
-        teamPos = { x: mySpawn.x + 2, y: mySpawn.y }
+        if (mySpawn.buildGreatWallLine > mySpawn.y) {
+            teamPos = { x: mySpawn.x + 2, y: mySpawn.y - 13 }
+
+        }
+        else {
+            teamPos = { x: mySpawn.x + 2, y: mySpawn.y + 13 }
+        }
     }
     else if (mySpawn.ramPos == "右侧") {
-        teamPos = { x: mySpawn.x - 2, y: mySpawn.y }
-    }
-    else {
-        teamPos = { x: mySpawn.x + 2, y: mySpawn.y }
+        if (mySpawn.buildGreatWallLine > mySpawn.y) {
+            teamPos = { x: mySpawn.x - 2, y: mySpawn.y - 13 }
+        }
+        else {
+            teamPos = { x: mySpawn.x - 2, y: mySpawn.y + 13 }
+        }
     }
 
     //组队系统

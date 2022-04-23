@@ -261,6 +261,8 @@ export function spawm() {
     let enemySpawn = getObjectsByPrototype(StructureSpawn).filter(s => !s.my)[0];
     let carrier = getObjectsByPrototype(Creep).filter(s => s.type == "carrier");
     let worker = getObjectsByPrototype(Creep).filter(s => s.type == "worker");
+    let droper = getObjectsByPrototype(Creep).filter(s => s.type == "droper")
+    let er = getObjectsByPrototype(Creep).filter(s => s.type == "er")
     let allinoner = getObjectsByPrototype(Creep).filter(s => s.type == "allinoner");
     let mySpawm_enemyCreeps_findClosest = findClosestByRange(mySpawn, enemyCreeps)
     let container = getObjectsByPrototype(StructureContainer).filter(s => s.store[RESOURCE_ENERGY] > 0);
@@ -268,9 +270,12 @@ export function spawm() {
     //体型数据
     const body_carriers = [MOVE, CARRY, MOVE, CARRY];
     const body_allinoners = [MOVE, MOVE, MOVE, MOVE, MOVE, MOVE, RANGED_ATTACK, RANGED_ATTACK, RANGED_ATTACK, HEAL];
-    //const body_allinoners = [MOVE, MOVE, MOVE, MOVE, MOVE, MOVE, MOVE, MOVE, MOVE, MOVE, RANGED_ATTACK, HEAL];
+    const body_allinonersII = [MOVE, MOVE, MOVE, RANGED_ATTACK, HEAL];
     //const body_allinoners = [RANGED_ATTACK, MOVE, MOVE, MOVE, MOVE, MOVE, MOVE, RANGED_ATTACK, HEAL];
-    const body_workers = [WORK, WORK, CARRY, CARRY, CARRY, CARRY, MOVE, MOVE, MOVE, MOVE, MOVE, MOVE];
+    const body_workers = [WORK, WORK, WORK, CARRY, CARRY, CARRY, CARRY, MOVE, MOVE, MOVE, MOVE, MOVE, MOVE];
+    // const body_workers = [WORK, CARRY, CARRY, MOVE, MOVE, MOVE];
+    const body_dropers = [CARRY, CARRY, CARRY, MOVE];
+    const body_ers = [TOUGH];
     //主动作战开始时间
     const fightTime = 260
 
@@ -280,11 +285,12 @@ export function spawm() {
     //建筑相关
     //修单边长城
     buildGreatWall();
+    buildSpawmProject();
     //修野外建筑
     //buildTower();
     buildExtension();
     //在敌人基地下面写个“死”字(写了影响修墙，不写了)
-    //motherFuckerDie();
+    motherFuckerDie();
 
     //出生顺序管理
     if (getTicks() <= 500) {
@@ -300,6 +306,19 @@ export function spawm() {
             if (workermix) {
                 workermix.type = "worker"
                 workermix.num = worker.length
+            }
+        }
+        else if (droper.length < 1) {
+            let dropermix = mySpawn.spawnCreep(body_dropers).object;
+            if (dropermix) {
+                dropermix.type = "droper"
+                dropermix.num = droper.length
+            }
+        } else if (er.length < 1) {
+            let ermix = mySpawn.spawnCreep(body_ers).object;
+            if (ermix) {
+                ermix.type = "er"
+                ermix.num = er.length
             }
         }
         else if (allinoner.length < 99) {
@@ -322,7 +341,7 @@ export function spawm() {
             }
         }
         else if (allinoner.length < 99) {
-            let allinonermix = mySpawn.spawnCreep(body_allinoners).object;
+            let allinonermix = mySpawn.spawnCreep(body_allinonersII).object;
             if (allinonermix) {
                 allinonermix.type = "allinoner"
                 allinonermix.num = allinonermix.length
@@ -411,7 +430,7 @@ export function spawm() {
         //2沼泽
         let touPiao = [];
         if (mySpawn.ramPos == "左侧" && mySpawn.buildGreatWallLine == undefined) {
-            for (let y = 11; y < 88; y++) {
+            for (let y = 20; y < 70; y++) {
                 for (let x = 1; x < 13; x++) {
                     //console.log(x, ",", y, ":", getTerrainAt({ x: x, y: y }))
                     if (getTerrainAt({ x: x, y: y }) != 1) {
@@ -440,7 +459,7 @@ export function spawm() {
             }
         }
         else if (mySpawn.ramPos == "右侧" && mySpawn.buildGreatWallLine == undefined) {
-            for (let y = 11; y < 88; y++) {
+            for (let y = 29; y < 79; y++) {
                 for (let x = 86; x < 98; x++) {
                     //console.log(x, ",", y, ":", getTerrainAt({ x: x, y: y }))
                     if (getTerrainAt({ x: x, y: y }) != 1) {
@@ -483,17 +502,33 @@ export function spawm() {
     function buildExtension() {
         //先检测基地10格以外的container
         //安放Extension
-        for (let containermix of container) {
-            if (getRange(containermix, mySpawn) > 10) {
-                createSite({ x: containermix.x - 2, y: containermix.y - 2 }, StructureExtension)
-                createSite({ x: containermix.x - 2, y: containermix.y + 2 }, StructureExtension)
-                createSite({ x: containermix.x - 2, y: containermix.y }, StructureExtension)
-                createSite({ x: containermix.x, y: containermix.y - 2 }, StructureExtension)
-                createSite({ x: containermix.x, y: containermix.y + 2 }, StructureExtension)
-                createSite({ x: containermix.x + 2, y: containermix.y + 2 }, StructureExtension)
-                createSite({ x: containermix.x + 2, y: containermix.y - 2 }, StructureExtension)
-                createSite({ x: containermix.x + 2, y: containermix.y }, StructureExtension)
+        if (getTicks() >= 240) {
+            for (let containermix of container) {
+                if (getRange(containermix, mySpawn) > 10 && getRange(containermix, enemySpawn) > 10) {
+                    // createSite({ x: containermix.x - 2, y: containermix.y - 2 }, StructureExtension)
+                    // createSite({ x: containermix.x - 2, y: containermix.y + 2 }, StructureExtension)
+                    // createSite({ x: containermix.x - 2, y: containermix.y }, StructureExtension)
+                    // createSite({ x: containermix.x, y: containermix.y - 2 }, StructureExtension)
+                    // createSite({ x: containermix.x, y: containermix.y + 2 }, StructureExtension)
+                    // createSite({ x: containermix.x + 2, y: containermix.y + 2 }, StructureExtension)
+                    // createSite({ x: containermix.x + 2, y: containermix.y - 2 }, StructureExtension)
+                    // createSite({ x: containermix.x + 2, y: containermix.y }, StructureExtension)
+                    createSite({ x: containermix.x - 3, y: containermix.y - 3 }, StructureExtension)
+                    createSite({ x: containermix.x - 3, y: containermix.y + 3 }, StructureExtension)
+                    createSite({ x: containermix.x - 3, y: containermix.y }, StructureExtension)
+                    createSite({ x: containermix.x, y: containermix.y - 3 }, StructureExtension)
+                    createSite({ x: containermix.x, y: containermix.y + 3 }, StructureExtension)
+                    createSite({ x: containermix.x + 3, y: containermix.y + 3 }, StructureExtension)
+                    createSite({ x: containermix.x + 3, y: containermix.y - 3 }, StructureExtension)
+                    createSite({ x: containermix.x + 3, y: containermix.y }, StructureExtension)
+                }
             }
         }
+    }
+
+    function buildSpawmProject() {
+        //先检测基地
+        //安放Rampart
+        createSite({ x: mySpawn.x, y: mySpawn.y }, StructureRampart)
     }
 }

@@ -253,87 +253,25 @@ Object.assign(global, {
 })
 //以上是万能头部
 
-export function work() {
+export function drop() {
     let mySpawn = getObjectsByPrototype(StructureSpawn).filter(s => s.my)[0];
-    let carrier = getObjectsByPrototype(Creep).filter(s => s.type == "carrier");
-    let worker = getObjectsByPrototype(Creep).filter(s => s.type == "worker");
+    let droper = getObjectsByPrototype(Creep).filter(s => s.type == "droper");
     let container = getObjectsByPrototype(StructureContainer).filter(s => s.store[RESOURCE_ENERGY] > 0);
     let mySpawn_Container_findClosest = findClosestByRange(mySpawn, container);
-    let myConstructionSite = getObjectsByPrototype(ConstructionSite).filter(s => s.my)
+    let myExtension = getObjectsByPrototype(StructureExtension).filter(s => s.my && s.store.getFreeCapacity(RESOURCE_ENERGY) > 0);
     //let 掉在地上的能量
     //还需补全逻辑，5格内的container空了之后，掉在地上的energy一并检索，找距离近的搬运
-    if (worker.length > 0) {
-        for (let workermix of worker) {
-            if (getTicks() <= 300) {
-                if (myConstructionSite.length > 0) {
-                    //建造逻辑
-                    if (!workermix.store[RESOURCE_ENERGY] > 0) {
-                        let containerinHome = getObjectsByPrototype(StructureContainer).filter(s => s.store[RESOURCE_ENERGY] > 0 && getRange(mySpawn, s) <= 8);
-                        let resource = getObjectsByPrototype(Resource).filter(i => i.resourceType == RESOURCE_ENERGY)
-                        let workermix_resource_findClosest = findClosestByRange(workermix, resource);
-                        let mySpawn_Container_findClosest = findClosestByRange(mySpawn, container);
-                        let workermix_Container_findClosest = findClosestByRange(workermix, container);
-                        let workermix_containerinHome_findClosest = findClosestByRange(workermix, containerinHome);
-                        if (workermix.withdraw(workermix_containerinHome_findClosest, RESOURCE_ENERGY) == ERR_NOT_IN_RANGE) {
-                            workermix.moveTo(workermix_containerinHome_findClosest);
-                        }
-                    } else {
-                        //const constructionSite = utils.getObjectsByPrototype(prototypes.ConstructionSite).find(i => i.my);
-                        let workermix_myConstructionSite_findClosest = findClosestByRange(workermix, myConstructionSite);
-                        if (workermix.build(workermix_myConstructionSite_findClosest) == ERR_NOT_IN_RANGE) {
-                            workermix.moveTo(workermix_myConstructionSite_findClosest);
-                        }
-                    }
+    if (droper.length > 0) {
+        for (let dropermix of droper) {
+            if (dropermix.store.getFreeCapacity(RESOURCE_ENERGY) > 0) {
+                let outContainer = getObjectsByPrototype(StructureContainer).filter(s => s.store[RESOURCE_ENERGY] > 0 && getRange(mySpawn, s) > 8);
+                let dropermix_outContainer_findClosest = findClosestByRange(dropermix, outContainer);
+                if (dropermix.withdraw(dropermix_outContainer_findClosest, RESOURCE_ENERGY) == ERR_NOT_IN_RANGE) {
+                    dropermix.moveTo(dropermix_outContainer_findClosest);
                 }
-                else if (myConstructionSite.length == 0) {
-                    if (workermix.store.getFreeCapacity(RESOURCE_ENERGY) > 0) {
-                        if (workermix.withdraw(mySpawn_Container_findClosest, RESOURCE_ENERGY) == ERR_NOT_IN_RANGE) {
-                            workermix.moveTo(mySpawn_Container_findClosest);
-                        }
-                    } else {
-                        if (workermix.transfer(mySpawn, RESOURCE_ENERGY) == ERR_NOT_IN_RANGE) {
-                            workermix.moveTo(mySpawn);
-                        }
-                    }
-
-                }
-            }
-            if (getTicks() > 300) {
-                if (myConstructionSite.length > 0) {
-                    //建造逻辑
-                    if (!workermix.store[RESOURCE_ENERGY] > 0) {
-                        let resource = getObjectsByPrototype(Resource).filter(i => i.resourceType == RESOURCE_ENERGY)
-                        let workermix_resource_findClosest = findClosestByRange(workermix, resource);
-                        let mySpawn_Container_findClosest = findClosestByRange(mySpawn, container);
-                        let workermix_Container_findClosest = findClosestByRange(workermix, container);
-                        if (workermix.pickup(workermix_resource_findClosest, RESOURCE_ENERGY) == ERR_NOT_IN_RANGE) {
-                            workermix.moveTo(workermix_resource_findClosest);
-                        }
-                        else if (workermix.withdraw(workermix_Container_findClosest, RESOURCE_ENERGY) == ERR_NOT_IN_RANGE) {
-                            workermix.moveTo(workermix_Container_findClosest);
-                        }
-                    } else {
-                        //const constructionSite = utils.getObjectsByPrototype(prototypes.ConstructionSite).find(i => i.my);
-                        let workermix_myConstructionSite_findClosest = findClosestByRange(workermix, myConstructionSite);
-                        if (workermix.build(workermix_myConstructionSite_findClosest) == ERR_NOT_IN_RANGE) {
-                            workermix.moveTo(workermix_myConstructionSite_findClosest);
-                        }
-                    }
-                }
-                else if (myConstructionSite.length == 0) {
-                    if (workermix.store.getFreeCapacity(RESOURCE_ENERGY) > 0) {
-                        if (workermix.withdraw(mySpawn_Container_findClosest, RESOURCE_ENERGY) == ERR_NOT_IN_RANGE) {
-                            workermix.moveTo(mySpawn_Container_findClosest);
-                        }
-                    } else {
-                        if (workermix.transfer(mySpawn, RESOURCE_ENERGY) == ERR_NOT_IN_RANGE) {
-                            workermix.moveTo(mySpawn);
-                        }
-                    }
-
-                }
+            } else {
+                dropermix.drop(RESOURCE_ENERGY)
             }
         }
     }
 }
-

@@ -354,3 +354,25 @@ export function isNearto(A, B) {
         return false
     }
 }
+
+//该函数接收一个数组，返回数组所有元素重复次数最少的
+export const getLeastDuplicateItems = (arr = []) => {
+    const hash = Object.create(null);
+    let keys, min; arr.forEach(el => {
+        hash[el] = hash[el] || {
+            value: el, count: 0
+        };
+        hash[el].count++;
+    });
+    keys = Object.keys(hash);
+    keys.sort(function (el, b) {
+        return hash[el].count - hash[b].count;
+    });
+    min = hash[keys[0]].count;
+    return keys.filter(el => {
+        return hash[el].count === min;
+    }).
+        map(el => {
+            return hash[el].value;
+        });
+}

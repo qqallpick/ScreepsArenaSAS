@@ -3,7 +3,7 @@ import { runAction } from './runAction';
 import { stats } from './stats';
 
 export function loop() {
-    //手动选择战术模式，可实现随机（但没必要）
+    //选择战术模式
     fightMode();
 
     //运行战术

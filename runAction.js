@@ -11,6 +11,12 @@ import { drop as drop3 } from './fight3Mode/drop';
 import { work as work3 } from './fight3Mode/work';
 import { fight as fight3 } from './fight3Mode/fight';
 import { visual as visual3 } from './fight3Mode/visual';
+import { spawm as spawm4 } from './fight4Mode/spawm';
+import { carry as carry4 } from './fight4Mode/carry';
+import { drop as drop4 } from './fight4Mode/drop';
+import { work as work4 } from './fight4Mode/work';
+import { fight as fight4 } from './fight4Mode/fight';
+import { visual as visual4 } from './fight4Mode/visual';
 
 export function runAction() {
     let mySpawn = getObjectsByPrototype(StructureSpawn).filter(s => s.my)[0];
@@ -20,6 +26,8 @@ export function runAction() {
         case 2: run2Mode();
             break;
         case 3: run3Mode();
+            break;
+        case 4: run4Mode();
             break;
     }
 }
@@ -44,4 +52,13 @@ function run3Mode() {
     work3();
     fight3();
     visual3();
+}
+
+function run4Mode() {
+    spawm4();
+    carry4();
+    drop4();
+    work4();
+    fight4();
+    visual4();
 }

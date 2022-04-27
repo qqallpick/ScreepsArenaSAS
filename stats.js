@@ -262,6 +262,8 @@ export function stats() {
             break;
         case 3: run3Mode();
             break;
+        case 4: run3Mode();
+            break;
     }
 }
 

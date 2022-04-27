@@ -260,8 +260,6 @@ export function work() {
     let container = getObjectsByPrototype(StructureContainer).filter(s => s.store[RESOURCE_ENERGY] > 0);
     let mySpawn_Container_findClosest = findClosestByRange(mySpawn, container);
     let myConstructionSite = getObjectsByPrototype(ConstructionSite).filter(s => s.my)
-    //let 掉在地上的能量
-    //还需补全逻辑，5格内的container空了之后，掉在地上的energy一并检索，找距离近的搬运
     if (worker.length > 0) {
         for (let workermix of worker) {
             if (getTicks() <= 300) {
@@ -270,15 +268,11 @@ export function work() {
                     if (!workermix.store[RESOURCE_ENERGY] > 0) {
                         let containerinHome = getObjectsByPrototype(StructureContainer).filter(s => s.store[RESOURCE_ENERGY] > 0 && getRange(mySpawn, s) <= 8);
                         let resource = getObjectsByPrototype(Resource).filter(i => i.resourceType == RESOURCE_ENERGY)
-                        let workermix_resource_findClosest = findClosestByRange(workermix, resource);
-                        let mySpawn_Container_findClosest = findClosestByRange(mySpawn, container);
-                        let workermix_Container_findClosest = findClosestByRange(workermix, container);
                         let workermix_containerinHome_findClosest = findClosestByRange(workermix, containerinHome);
                         if (workermix.withdraw(workermix_containerinHome_findClosest, RESOURCE_ENERGY) == ERR_NOT_IN_RANGE) {
                             workermix.moveTo(workermix_containerinHome_findClosest);
                         }
                     } else {
-                        //const constructionSite = utils.getObjectsByPrototype(prototypes.ConstructionSite).find(i => i.my);
                         let workermix_myConstructionSite_findClosest = findClosestByRange(workermix, myConstructionSite);
                         if (workermix.build(workermix_myConstructionSite_findClosest) == ERR_NOT_IN_RANGE) {
                             workermix.moveTo(workermix_myConstructionSite_findClosest);
@@ -313,7 +307,6 @@ export function work() {
                             workermix.moveTo(workermix_Container_findClosest);
                         }
                     } else {
-                        //const constructionSite = utils.getObjectsByPrototype(prototypes.ConstructionSite).find(i => i.my);
                         let workermix_myConstructionSite_findClosest = findClosestByRange(workermix, myConstructionSite);
                         if (workermix.build(workermix_myConstructionSite_findClosest) == ERR_NOT_IN_RANGE) {
                             workermix.moveTo(workermix_myConstructionSite_findClosest);
@@ -330,7 +323,6 @@ export function work() {
                             workermix.moveTo(mySpawn);
                         }
                     }
-
                 }
             }
         }

@@ -256,11 +256,9 @@ Object.assign(global, {
 export function drop() {
     let mySpawn = getObjectsByPrototype(StructureSpawn).filter(s => s.my)[0];
     let droper = getObjectsByPrototype(Creep).filter(s => s.type == "droper");
-    let container = getObjectsByPrototype(StructureContainer).filter(s => s.store[RESOURCE_ENERGY] > 0);
-    let mySpawn_Container_findClosest = findClosestByRange(mySpawn, container);
-    let myExtension = getObjectsByPrototype(StructureExtension).filter(s => s.my && s.store.getFreeCapacity(RESOURCE_ENERGY) > 0);
-    //let 掉在地上的能量
-    //还需补全逻辑，5格内的container空了之后，掉在地上的energy一并检索，找距离近的搬运
+    //只有一个工作，就是从container中拿能量，然后丢在地上
+    //但是不拿基地范围内8格的container能量
+    //效率还可以，但是得考虑野外作业的危险性
     if (droper.length > 0) {
         for (let dropermix of droper) {
             if (dropermix.store.getFreeCapacity(RESOURCE_ENERGY) > 0) {

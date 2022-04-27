@@ -270,12 +270,10 @@ export function spawm() {
     //体型数据
     const body_carriers = [MOVE, CARRY, MOVE, CARRY];
     const body_allinoners = [MOVE, MOVE, MOVE, MOVE, MOVE, MOVE, RANGED_ATTACK, RANGED_ATTACK, RANGED_ATTACK, HEAL];
-    const body_allinonersII = [MOVE, MOVE, MOVE, RANGED_ATTACK, HEAL];
-    //const body_allinoners = [RANGED_ATTACK, MOVE, MOVE, MOVE, MOVE, MOVE, MOVE, RANGED_ATTACK, HEAL];
     const body_workers = [WORK, WORK, WORK, CARRY, CARRY, CARRY, CARRY, MOVE, MOVE, MOVE, MOVE, MOVE, MOVE];
-    // const body_workers = [WORK, CARRY, CARRY, MOVE, MOVE, MOVE];
     const body_dropers = [CARRY, CARRY, CARRY, MOVE];
     const body_ers = [TOUGH];
+
     //主动作战开始时间
     const fightTime = 260
 
@@ -287,9 +285,8 @@ export function spawm() {
     buildGreatWall();
     buildSpawmProject();
     //修野外建筑
-    //buildTower();
     buildExtension();
-    //在敌人基地下面写个“死”字(写了影响修墙，不写了)
+    //在敌人基地下面写个“死”字(不写了，改成画Logo)
     //motherFuckerDie();
     myLogo();
 
@@ -363,6 +360,7 @@ export function spawm() {
     }
     //敌人相关
     //根据左侧和右侧要区分
+    //配合修墙重新规划
     if (enemyCreeps.length > 0) {
         if (mySpawn.ramPos == "左侧") {
             if (mySpawn.buildGreatWallLine > mySpawn.y) {
@@ -538,8 +536,6 @@ export function spawm() {
                 }
             }
             //找出出现次数最少的x，就是那一排
-            //console.log(touPiao)
-            //console.log(getLeastDuplicateItems(touPiao))
             let houxuan = getLeastDuplicateItems(touPiao)
             let bar = houxuan[0];
             for (let i of houxuan) {
@@ -547,11 +543,9 @@ export function spawm() {
                     bar = i
                 }
             }
-            //console.log(bar)
             mySpawn.buildGreatWallLine = bar
             //安放建筑工地代码
             for (let x = 1; x < 13; x++) {
-                //console.log(x, ",", bar, ":", getTerrainAt({ x: x, y: bar }))
                 if (getTerrainAt({ x: x, y: bar }) != 1) {
                     createSite({ x: x, y: bar }, StructureWall)
                 }
@@ -560,15 +554,12 @@ export function spawm() {
         else if (mySpawn.ramPos == "右侧" && mySpawn.buildGreatWallLine == undefined) {
             for (let y = 21; y < 28; y++) {
                 for (let x = 86; x < 98; x++) {
-                    //console.log(x, ",", y, ":", getTerrainAt({ x: x, y: y }))
                     if (getTerrainAt({ x: x, y: y }) != 1) {
                         touPiao.push(y)
                     }
                 }
             }
             //找出出现次数最少的x，就是那一排
-            //console.log(touPiao)
-            //console.log(getLeastDuplicateItems(touPiao))
             let houxuan = getLeastDuplicateItems(touPiao)
             let bar = houxuan[0];
             for (let i of houxuan) {
@@ -576,11 +567,9 @@ export function spawm() {
                     bar = i
                 }
             }
-            //console.log(bar)
             mySpawn.buildGreatWallLine = bar
             //安放建筑工地代码
             for (let x = 86; x < 98; x++) {
-                //console.log(x, ",", bar, ":", getTerrainAt({ x: x, y: bar }))
                 if (getTerrainAt({ x: x, y: bar }) != 1) {
                     createSite({ x: x, y: bar }, StructureWall)
                 }
@@ -604,14 +593,6 @@ export function spawm() {
         if (getTicks() >= 240) {
             for (let containermix of container) {
                 if (getRange(containermix, mySpawn) > 10 && getRange(containermix, enemySpawn) > 10) {
-                    // createSite({ x: containermix.x - 2, y: containermix.y - 2 }, StructureExtension)
-                    // createSite({ x: containermix.x - 2, y: containermix.y + 2 }, StructureExtension)
-                    // createSite({ x: containermix.x - 2, y: containermix.y }, StructureExtension)
-                    // createSite({ x: containermix.x, y: containermix.y - 2 }, StructureExtension)
-                    // createSite({ x: containermix.x, y: containermix.y + 2 }, StructureExtension)
-                    // createSite({ x: containermix.x + 2, y: containermix.y + 2 }, StructureExtension)
-                    // createSite({ x: containermix.x + 2, y: containermix.y - 2 }, StructureExtension)
-                    // createSite({ x: containermix.x + 2, y: containermix.y }, StructureExtension)
                     createSite({ x: containermix.x - 3, y: containermix.y - 3 }, StructureExtension)
                     createSite({ x: containermix.x - 3, y: containermix.y + 3 }, StructureExtension)
                     createSite({ x: containermix.x - 3, y: containermix.y }, StructureExtension)

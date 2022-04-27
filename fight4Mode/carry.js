@@ -257,10 +257,10 @@ export function carry() {
     let mySpawn = getObjectsByPrototype(StructureSpawn).filter(s => s.my)[0];
     let carrier = getObjectsByPrototype(Creep).filter(s => s.type == "carrier");
     let container = getObjectsByPrototype(StructureContainer).filter(s => s.store[RESOURCE_ENERGY] > 0);
-    let mySpawn_Container_findClosest = findClosestByRange(mySpawn, container);
     let myExtension = getObjectsByPrototype(StructureExtension).filter(s => s.my && s.store.getFreeCapacity(RESOURCE_ENERGY) > 0);
-    //let 掉在地上的能量
-    //还需补全逻辑，5格内的container空了之后，掉在地上的energy一并检索，找距离近的搬运
+    //从container拿能量放到1extension2spawm
+    //从1地上的能量2container拿放到1extension2spawm
+    //这里的逻辑并不完美，时间是经过实际测算的，但是不精确
     if (getTicks() <= 240) {
         if (carrier.length > 0) {
             for (let carriermix of carrier) {
@@ -304,7 +304,6 @@ export function carry() {
                     }
                 }
             }
-
         }
     }
 }

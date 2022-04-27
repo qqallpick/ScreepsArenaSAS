@@ -302,7 +302,7 @@ export function setobstacle(costmatrix) {
     }
     for (const prototype of obstacleEnemyPrototypes) {
         let obstacles = getObjectsByPrototype(prototype).filter(
-            (p) => p.exists & !p.my  //我方单位不算255
+            (p) => p.exists & !p.my  
         );
         for (const obstacle of obstacles) {
             costmatrix.set(obstacle.x, obstacle.y, 255);

@@ -260,5 +260,5 @@ export function fightMode() {
     //mySpawn.fightMode = 2，一体机蜂群模式
     //mySpawn.fightMode = 3，修围墙模式
     //mySpawn.fightMode = 4，测试模式
-    mySpawn.fightMode = 3
+    mySpawn.fightMode = 4
 }

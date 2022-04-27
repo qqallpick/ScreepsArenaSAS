@@ -258,30 +258,19 @@ import { findLowestHits, setobstacle, isNearto } from '../utils';
 export function fight() {
     let mySpawn = getObjectsByPrototype(StructureSpawn).filter(s => s.my)[0];
     let enemyCreeps = getObjectsByPrototype(Creep).filter(s => !s.my);
-    let enemyConstructionSite = getObjectsByPrototype(ConstructionSite).filter(s => !s.my);
     let enemySpawn = getObjectsByPrototype(StructureSpawn).filter(s => !s.my)[0];
     let enemyExtension = getObjectsByPrototype(StructureExtension).filter(s => !s.my);
     let enemyTower = getObjectsByPrototype(StructureTower).filter(s => !s.my);
     let allinoner = getObjectsByPrototype(Creep).filter(s => s.type == "allinoner");
     let mySpawn_enemyCreeps_findClosest = findClosestByRange(mySpawn, enemyCreeps)
     let myCreepsInjured = getObjectsByPrototype(Creep).filter(i => i.my && i.hits < i.hitsMax)
-    let allinoner_teamLeader = getObjectsByPrototype(Creep).filter(s => s.type == "allinoner" && s.teamNow == true && s.teamLeader == true);
-
     let teamPos = {}
     let costs = new CostMatrix;
-    let enemyRampart = getObjectsByPrototype(StructureRampart).filter(
-        (p) => p.exists
-    );
-    let enemyWall = getObjectsByPrototype(StructureWall).filter(
-        (p) => p.exists
-    );
     let teamLeaderGoDirection;
 
     //设置costmatrix
     costs = setobstacle(costs);
 
-    // const pos1point = { x: (mySpawn.x + 3), y: (mySpawn.y + 12) }
-    // const pos2point = { x: (mySpawn.x - 3), y: (mySpawn.y - 12) }
     //集结点设置
     if (mySpawn.ramPos == "左侧") {
         if (mySpawn.buildGreatWallLine > mySpawn.y) {
@@ -302,7 +291,8 @@ export function fight() {
     }
 
     //组队系统
-    //组队条件：1、处于可以攻击的状态，即能打到人
+    //组队条件：
+    //1、处于可以攻击的状态，即能打到人
     //2、是否贴近队友，isNearto
     if (allinoner.length >= 2 && enemyCreeps.length > 0) {
         for (let allinonermix of allinoner) {
@@ -337,7 +327,6 @@ export function fight() {
                 let allinonermix_enemyCreeps_findClosest = findClosestByRange(allinonermix, enemyCreeps)
                 if (getRange(allinonermix, allinonermix_enemyCreeps_findClosest) >= 4 &&
                     getRange(allinonermix, enemySpawn) > 7) {
-                    //let allinonermix_mySpawn_enemyCreeps_findClosest_findPath = findPath(allinonermix, mySpawn_enemyCreeps_findClosest);
                     let allinonermix_allinonermix_enemyCreeps_findClosest_findPath = findPath(allinonermix, allinonermix_enemyCreeps_findClosest);
                     allinonermix.moveTo(allinonermix_allinonermix_enemyCreeps_findClosest_findPath[0])
                     teamLeaderGoDirection = getDirection(allinonermix_allinonermix_enemyCreeps_findClosest_findPath[0].x - allinonermix.x, allinonermix_allinonermix_enemyCreeps_findClosest_findPath[0].y - allinonermix.y)
@@ -350,10 +339,8 @@ export function fight() {
                 else if (getRange(allinonermix, allinonermix_enemyCreeps_findClosest) < 3 &&
                     getRange(allinonermix, enemySpawn) > 7) {
                     let allinonermix_allinonermix_enemyCreeps_findClosest_findPath = findPath(allinonermix, allinonermix_enemyCreeps_findClosest, { flee: true, range: 7, costMatrix: costs });
-                    //console.log(allinonermix_allinonermix_enemyCreeps_findClosest_findPath)
                     allinonermix.moveTo(allinonermix_allinonermix_enemyCreeps_findClosest_findPath[0])
                     teamLeaderGoDirection = getDirection(allinonermix_allinonermix_enemyCreeps_findClosest_findPath[0].x - allinonermix.x, allinonermix_allinonermix_enemyCreeps_findClosest_findPath[0].y - allinonermix.y)
-                    //console.log(allinonermix.moveTo(allinonermix_allinonermix_enemyCreeps_findClosest_findPath[0]))
                 }
                 else {
                     allinonermix.moveTo(enemySpawn)
@@ -391,7 +378,6 @@ export function fight() {
                     getRange(allinonermix, enemySpawn) > 1) {
                     let allinonermix_allinonermix_enemyCreeps_findClosest_findPath = findPath(allinonermix, allinonermix_enemyCreeps_findClosest);
                     allinonermix.moveTo(allinonermix_allinonermix_enemyCreeps_findClosest_findPath[0])
-                    //teamLeaderGoDirection = getDirection(allinonermix_allinonermix_enemyCreeps_findClosest_findPath[0].x - allinonermix.x, allinonermix_allinonermix_enemyCreeps_findClosest_findPath[0].y - allinonermix.y)
                 }
                 else if (getRange(allinonermix, allinonermix_enemyCreeps_findClosest) == 3 &&
                     getRange(allinonermix, enemySpawn) > 1) {
@@ -400,10 +386,7 @@ export function fight() {
                 else if (getRange(allinonermix, allinonermix_enemyCreeps_findClosest) < 3 &&
                     getRange(allinonermix, enemySpawn) > 1) {
                     let allinonermix_allinonermix_enemyCreeps_findClosest_findPath = findPath(allinonermix, allinonermix_enemyCreeps_findClosest, { flee: true, range: 7, costMatrix: costs });
-                    //console.log(allinonermix_allinonermix_enemyCreeps_findClosest_findPath)
                     allinonermix.moveTo(allinonermix_allinonermix_enemyCreeps_findClosest_findPath[0])
-                    //teamLeaderGoDirection = getDirection(allinonermix.x - allinonermix_allinonermix_enemyCreeps_findClosest_findPath[0].x, allinonermix.y - allinonermix_allinonermix_enemyCreeps_findClosest_findPath[0].y)
-                    //console.log(allinonermix.moveTo(allinonermix_allinonermix_enemyCreeps_findClosest_findPath[0]))
                 }
                 else {
                     allinonermix.moveTo(enemySpawn)
@@ -558,8 +541,6 @@ export function fight() {
             }
         }
     }
-
-
 }
 
 

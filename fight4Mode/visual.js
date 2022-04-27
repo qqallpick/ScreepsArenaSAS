@@ -2,6 +2,8 @@ import { Visual } from 'game/visual'
 
 
 export function visual() {
+    //安全区
+    //配合修墙重新规划
     let mySpawn = getObjectsByPrototype(StructureSpawn).filter(s => s.my)[0];
     if (mySpawn.ramPos == "左侧" && mySpawn.buildGreatWallLine != undefined) {
         if (mySpawn.buildGreatWallLine > mySpawn.y) {
@@ -16,9 +18,6 @@ export function visual() {
             new Visual().rect({ x: mySpawn.x - 7, y: mySpawn.y - 54 }, 11, mySpawn.buildGreatWallLine, { opacity: 0.1 });
         }
         else {
-            console.log(mySpawn.x)
-            console.log(mySpawn.buildGreatWallLine)
-            console.log(99 - mySpawn.buildGreatWallLine)
             new Visual().rect({ x: mySpawn.x - 7, y: mySpawn.buildGreatWallLine }, 11, (99 - mySpawn.buildGreatWallLine), { opacity: 0.1 });
         }
     }

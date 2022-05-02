@@ -12,10 +12,10 @@ import { work as work3 } from './fight3Mode/work';
 import { fight as fight3 } from './fight3Mode/fight';
 import { visual as visual3 } from './fight3Mode/visual';
 import { spawm as spawm4 } from './fight4Mode/spawm';
-import { carry as carry4 } from './fight4Mode/carry';
-import { drop as drop4 } from './fight4Mode/drop';
-import { work as work4 } from './fight4Mode/work';
-import { fight as fight4 } from './fight4Mode/fight';
+import { carrier as carrier4 } from './fight4Mode/carrier';
+import { attacker as attacker4 } from './fight4Mode/attacker';
+import { worker as worker4 } from './fight4Mode/worker';
+import { ranger as ranger4 } from './fight4Mode/ranger';
 import { visual as visual4 } from './fight4Mode/visual';
 
 export function runAction() {
@@ -56,9 +56,9 @@ function run3Mode() {
 
 function run4Mode() {
     spawm4();
-    carry4();
-    drop4();
-    work4();
-    fight4();
+    carrier4();
+    worker4();
+    ranger4();
+    attacker4();
     visual4();
 }

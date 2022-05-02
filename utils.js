@@ -1,258 +1,4 @@
-//main未使用万能头部，仅作保存用 
-//以下是万能头部
-import {
-    ConstructionSite,
-    Creep,
-    GameObject,
-    OwnedStructure,
-    Resource,
-    RoomObject,
-    Source,
-    Structure,
-    StructureContainer,
-    StructureExtension,
-    StructureRampart,
-    StructureRoad,
-    StructureSpawn,
-    StructureTower,
-    StructureWall,
-} from '/game/prototypes';
-import {
-    ATTACK,
-    ATTACK_POWER,
-    BODYPART_COST,
-    BODYPART_HITS,
-    BOTTOM,
-    BOTTOM_LEFT,
-    BOTTOM_RIGHT,
-    BUILD_POWER,
-    CARRY,
-    CARRY_CAPACITY,
-    CONSTRUCTION_COST,
-    CONSTRUCTION_COST_ROAD_SWAMP_RATIO,
-    CONSTRUCTION_COST_ROAD_WALL_RATIO,
-    CONTAINER_CAPACITY,
-    CONTAINER_HITS,
-    CREEP_SPAWN_TIME,
-    DISMANTLE_COST,
-    DISMANTLE_POWER,
-    ERR_BUSY,
-    ERR_FULL,
-    ERR_INVALID_ARGS,
-    ERR_INVALID_TARGET,
-    ERR_NAME_EXISTS,
-    ERR_NOT_ENOUGH_ENERGY,
-    ERR_NOT_ENOUGH_EXTENSIONS,
-    ERR_NOT_ENOUGH_RESOURCES,
-    ERR_NOT_FOUND,
-    ERR_NOT_IN_RANGE,
-    ERR_NOT_OWNER,
-    ERR_NO_BODYPART,
-    ERR_NO_PATH,
-    ERR_TIRED,
-    EXTENSION_ENERGY_CAPACITY,
-    EXTENSION_HITS,
-    HARVEST_POWER,
-    HEAL,
-    HEAL_POWER,
-    LEFT,
-    MAX_CONSTRUCTION_SITES,
-    MAX_CREEP_SIZE,
-    MOVE,
-    OBSTACLE_OBJECT_TYPES,
-    OK,
-    RAMPART_HITS,
-    RAMPART_HITS_MAX,
-    RANGED_ATTACK,
-    RANGED_ATTACK_DISTANCE_RATE,
-    RANGED_ATTACK_POWER,
-    RANGED_HEAL_POWER,
-    REPAIR_COST,
-    REPAIR_POWER,
-    RESOURCES_ALL,
-    RESOURCE_DECAY,
-    RESOURCE_ENERGY,
-    RIGHT,
-    ROAD_HITS,
-    ROAD_WEAROUT,
-    SOURCE_ENERGY_REGEN,
-    SPAWN_ENERGY_CAPACITY,
-    SPAWN_HITS,
-    STRUCTURE_PROTOTYPES,
-    TERRAIN_SWAMP,
-    TERRAIN_WALL,
-    TOP,
-    TOP_LEFT,
-    TOP_RIGHT,
-    TOUGH,
-    TOWER_CAPACITY,
-    TOWER_COOLDOWN,
-    TOWER_ENERGY_COST,
-    TOWER_FALLOFF,
-    TOWER_FALLOFF_RANGE,
-    TOWER_HITS,
-    TOWER_OPTIMAL_RANGE,
-    TOWER_POWER_ATTACK,
-    TOWER_POWER_HEAL,
-    TOWER_POWER_REPAIR,
-    TOWER_RANGE,
-    WALL_HITS,
-    WALL_HITS_MAX,
-    WORK,
-} from '/game/constants';
-
-import {
-    createConstructionSite,
-    findClosestByPath,
-    findClosestByRange,
-    findInRange,
-    findPath,
-    getCpuTime,
-    getDirection,
-    getDistance,
-    getHeapStatistics,
-    getObjectById,
-    getObjects,
-    getObjectsByPrototype,
-    getRange,
-    getTerrainAt,
-    getTicks,
-    getTime,
-} from '/game/utils';
-
-
-import { searchPath, CostMatrix } from '/game/path-finder';
-import { arenaInfo } from '/game';
-
-
-Object.assign(global, {
-    arenaInfo,
-    searchPath,
-    CostMatrix,
-})
-
-Object.assign(global, {
-    ConstructionSite,
-    Creep,
-    GameObject,
-    OwnedStructure,
-    Resource,
-    RoomObject,
-    Source,
-    Structure,
-    StructureContainer,
-    StructureExtension,
-    StructureRampart,
-    StructureRoad,
-    StructureSpawn,
-    StructureTower,
-    StructureWall,
-})
-
-Object.assign(global, {
-    createConstructionSite,
-    findClosestByPath,
-    findClosestByRange,
-    findInRange,
-    findPath,
-    getCpuTime,
-    getDirection,
-    getDistance,
-    getHeapStatistics,
-    getObjectById,
-    getObjects,
-    getObjectsByPrototype,
-    getRange,
-    getTerrainAt,
-    getTicks,
-    getTime,
-})
-
-
-Object.assign(global, {
-    ATTACK,
-    ATTACK_POWER,
-    BODYPART_COST,
-    BODYPART_HITS,
-    BOTTOM,
-    BOTTOM_LEFT,
-    BOTTOM_RIGHT,
-    BUILD_POWER,
-    CARRY,
-    CARRY_CAPACITY,
-    CONSTRUCTION_COST,
-    CONSTRUCTION_COST_ROAD_SWAMP_RATIO,
-    CONSTRUCTION_COST_ROAD_WALL_RATIO,
-    CONTAINER_CAPACITY,
-    CONTAINER_HITS,
-    CREEP_SPAWN_TIME,
-    DISMANTLE_COST,
-    DISMANTLE_POWER,
-    ERR_BUSY,
-    ERR_FULL,
-    ERR_INVALID_ARGS,
-    ERR_INVALID_TARGET,
-    ERR_NAME_EXISTS,
-    ERR_NOT_ENOUGH_ENERGY,
-    ERR_NOT_ENOUGH_EXTENSIONS,
-    ERR_NOT_ENOUGH_RESOURCES,
-    ERR_NOT_FOUND,
-    ERR_NOT_IN_RANGE,
-    ERR_NOT_OWNER,
-    ERR_NO_BODYPART,
-    ERR_NO_PATH,
-    ERR_TIRED,
-    EXTENSION_ENERGY_CAPACITY,
-    EXTENSION_HITS,
-    HARVEST_POWER,
-    HEAL,
-    HEAL_POWER,
-    LEFT,
-    MAX_CONSTRUCTION_SITES,
-    MAX_CREEP_SIZE,
-    MOVE,
-    OBSTACLE_OBJECT_TYPES,
-    OK,
-    RAMPART_HITS,
-    RAMPART_HITS_MAX,
-    RANGED_ATTACK,
-    RANGED_ATTACK_DISTANCE_RATE,
-    RANGED_ATTACK_POWER,
-    RANGED_HEAL_POWER,
-    REPAIR_COST,
-    REPAIR_POWER,
-    RESOURCES_ALL,
-    RESOURCE_DECAY,
-    RESOURCE_ENERGY,
-    RIGHT,
-    ROAD_HITS,
-    ROAD_WEAROUT,
-    SOURCE_ENERGY_REGEN,
-    SPAWN_ENERGY_CAPACITY,
-    SPAWN_HITS,
-    STRUCTURE_PROTOTYPES,
-    TERRAIN_SWAMP,
-    TERRAIN_WALL,
-    TOP,
-    TOP_LEFT,
-    TOP_RIGHT,
-    TOUGH,
-    TOWER_CAPACITY,
-    TOWER_COOLDOWN,
-    TOWER_ENERGY_COST,
-    TOWER_FALLOFF,
-    TOWER_FALLOFF_RANGE,
-    TOWER_HITS,
-    TOWER_OPTIMAL_RANGE,
-    TOWER_POWER_ATTACK,
-    TOWER_POWER_HEAL,
-    TOWER_POWER_REPAIR,
-    TOWER_RANGE,
-    WALL_HITS,
-    WALL_HITS_MAX,
-    WORK,
-})
-//以上是万能头部
+import './importAll';
 
 //功能性函数
 
@@ -302,7 +48,7 @@ export function setobstacle(costmatrix) {
     }
     for (const prototype of obstacleEnemyPrototypes) {
         let obstacles = getObjectsByPrototype(prototype).filter(
-            (p) => p.exists & !p.my  
+            (p) => p.exists && !p.my
         );
         for (const obstacle of obstacles) {
             costmatrix.set(obstacle.x, obstacle.y, 255);
@@ -311,7 +57,7 @@ export function setobstacle(costmatrix) {
     }
     for (const prototype of obstacleEnemyPrototypesCreep) {
         let obstacles = getObjectsByPrototype(prototype).filter(
-            (p) => p.exists & !p.my  //我方单位不算255
+            (p) => p.exists && !p.my  //我方单位不算255
         );
         for (const obstacle of obstacles) {
             costmatrix.set(obstacle.x, obstacle.y, 255);
@@ -375,4 +121,59 @@ export const getLeastDuplicateItems = (arr = []) => {
         map(el => {
             return hash[el].value;
         });
+}
+
+//判断对象是否具有攻击性
+export function canCreepAttck(creep) {
+    let jieguo = false
+    for (let bodymix of creep.body) {
+        if (bodymix.type == 'attack') {
+            jieguo = true
+            break;
+        } else if (bodymix.type == 'ranged_attack') {
+            jieguo = true
+            break;
+        } else {
+            jieguo = false
+        }
+    }
+    return jieguo
+}
+
+//判断对象是否已经出生
+export function isCreepBirth(creep) {
+    let jieguo = true
+    let mySpawn = getObjectsByPrototype(StructureSpawn).find(s => s.my);
+    let enemySpawn = getObjectsByPrototype(StructureSpawn).find(s => !s.my);
+    if (creep.my) {
+        if (creep.x == mySpawn.x && creep.y == mySpawn.y) {
+            jieguo = false
+        }
+    }
+    else if (!creep.my) {
+        if (creep.x == enemySpawn.x && creep.y == enemySpawn.y) {
+            jieguo = false
+        }
+    }
+    return jieguo
+}
+
+//判断某个pos点上是否有creep
+export function isHaveCreep(pos) {
+    let creep = getObjectsByPrototype(Creep).find(s => s.x == pos.x && s.y == pos.y);
+    if (creep) {
+        return true
+    }
+    else {
+        return false
+    }
+}
+
+//判断creep的位置是不是pos的位置
+export function isonthePos(creep, pos) {
+    if (creep.x == pos.x && creep.y == pos.y) {
+        return true
+    } else {
+        return false
+    }
 }

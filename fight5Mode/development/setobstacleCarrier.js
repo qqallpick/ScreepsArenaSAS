@@ -1,12 +1,12 @@
-import '../importAll'
-import { isCreepBirth, canCreepAttck } from '../utils';
+import '../../importAll'
+import { isCreepBirth, canCreepAttck } from '../../utils';
 
 /**
 *增加障碍物cost
 *@param {*} costmatrix
 *@returns
 */
-export function setobstacle(costmatrix) {
+export function setobstacleCarrier(costmatrix) {
     let obstaclePrototypes = [
         StructureSpawn,
         StructureExtension,
@@ -103,19 +103,19 @@ export function setobstacle(costmatrix) {
             }
         }
     }
-    //自然沼泽把已经有的数值/2+1
+    //自然沼泽把已经有的数值+10
     for (let x = 0; x < 100; x++) {
         for (let y = 0; y < 100; y++) {
             if (getTerrainAt({ x: x, y: y }) == 2) {
-                costmatrix.set(x, y, costmatrix.get(x, y) / 2 + 1);
+                costmatrix.set(x, y, costmatrix.get(x, y) + 10);
             }
         }
     }
-    //自然路把已有的数值+2
+    //自然路把已有的数值+1
     for (let x = 0; x < 100; x++) {
         for (let y = 0; y < 100; y++) {
             if (getTerrainAt({ x: x, y: y }) == 0) {
-                costmatrix.set(x, y, costmatrix.get(x, y) + 2);
+                costmatrix.set(x, y, costmatrix.get(x, y) + 1);
             }
         }
     }

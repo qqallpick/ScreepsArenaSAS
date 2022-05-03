@@ -1,6 +1,5 @@
 import './importAll';
-import { canCreepAttck, isCreepBirth } from './utils';
-import { overmind } from './fight5Mode/overMind';
+import { overmind } from './overMind';
 
 export function stats() {
     let mySpawn = getObjectsByPrototype(StructureSpawn).find(s => s.my);
@@ -89,8 +88,8 @@ function run5Mode() {
     //负责显示状态，具体实现在各个模块里面
     console.log("马作的卢飞快")
     console.log("游戏时间：", getTicks(), "ticks")
-    console.log("战术模式：", mySpawn.fightMode)
+    console.log("代码版本：", mySpawn.fightMode)
     console.log("敌方战术：", overmind.enemyTactics)
-    console.log("针对策略：", mySpawn.fightMode)
+    console.log("针对策略：", overmind.fightMode)
     console.log("战争状态：", overmind.warStats)
 }

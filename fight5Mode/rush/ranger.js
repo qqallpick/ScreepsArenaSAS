@@ -1,6 +1,5 @@
-import '../importAll';
-
-import { isCreepBirth, canCreepAttck, isHaveCreep, isonthePos } from '../utils';
+import '../../importAll';
+import { isCreepBirth, canCreepAttck, isHaveCreep, isonthePos } from '../../utils';
 
 export function ranger() {
     let mySpawn = getObjectsByPrototype(StructureSpawn).find(s => s.my);

@@ -1,5 +1,5 @@
-import '../importAll'
-import { isCreepBirth, canCreepAttck } from '../utils';
+import '../../importAll'
+import { isCreepBirth, canCreepAttck } from '../../utils';
 
 /**
 *增加障碍物cost

@@ -1,5 +1,5 @@
-import '../importAll';
-import { createSite, getLeastDuplicateItems } from '../utils';
+import '../../importAll';
+import { createSite, getLeastDuplicateItems } from '../../utils';
 
 export function spawm() {
     let mySpawn = getObjectsByPrototype(StructureSpawn).find(s => s.my);
@@ -11,11 +11,8 @@ export function spawm() {
 
     //体型数据
     const body_carriers = [MOVE, CARRY, MOVE, CARRY];
-    const body_allinoners = [MOVE, MOVE, MOVE, MOVE, MOVE, MOVE, RANGED_ATTACK, RANGED_ATTACK, RANGED_ATTACK, HEAL];
     const body_attackers = [MOVE, MOVE, MOVE, MOVE, MOVE, MOVE, MOVE, MOVE, MOVE, MOVE, MOVE, MOVE, MOVE, MOVE, MOVE, ATTACK, ATTACK, ATTACK];
     const body_workers = [WORK, CARRY, MOVE];
-    const body_dropers = [CARRY, CARRY, CARRY, MOVE];
-    const body_ers = [TOUGH];
     const body_rangers = [MOVE, RANGED_ATTACK, RANGED_ATTACK, RANGED_ATTACK, RANGED_ATTACK, RANGED_ATTACK, RANGED_ATTACK];
 
     //主动作战开始时间
@@ -173,13 +170,14 @@ export function spawm() {
         //先检测基地
         //安放Rampart
         createSite({ x: mySpawn.x, y: mySpawn.y }, StructureRampart)
-        if (mySpawn.ramPos == "左侧") {
-            createSite({ x: mySpawn.x - 1, y: mySpawn.y }, StructureRampart)
-            createSite({ x: mySpawn.x + 1, y: mySpawn.y }, StructureRampart)
-        } else if (mySpawn.ramPos == "右侧") {
-            createSite({ x: mySpawn.x + 1, y: mySpawn.y }, StructureRampart)
-            createSite({ x: mySpawn.x - 1, y: mySpawn.y }, StructureRampart)
-        }
+        if (getTicks() > 150)
+            if (mySpawn.ramPos == "左侧") {
+                createSite({ x: mySpawn.x - 1, y: mySpawn.y }, StructureRampart)
+                createSite({ x: mySpawn.x + 1, y: mySpawn.y }, StructureRampart)
+            } else if (mySpawn.ramPos == "右侧") {
+                createSite({ x: mySpawn.x + 1, y: mySpawn.y }, StructureRampart)
+                createSite({ x: mySpawn.x - 1, y: mySpawn.y }, StructureRampart)
+            }
 
     }
 }

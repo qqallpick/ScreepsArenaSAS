@@ -17,13 +17,22 @@ import { attacker as attacker4 } from './fight4Mode/attacker';
 import { worker as worker4 } from './fight4Mode/worker';
 import { ranger as ranger4 } from './fight4Mode/ranger';
 import { visual as visual4 } from './fight4Mode/visual';
-import { runOvermind as runOvermind5 } from './fight5Mode/overMind';
-import { spawm as spawm5 } from './fight5Mode/spawm';
-import { carrier as carrier5 } from './fight5Mode/carrier';
-import { attacker as attacker5 } from './fight5Mode/attacker';
-import { worker as worker5 } from './fight5Mode/worker';
-import { ranger as ranger5 } from './fight5Mode/ranger';
-import { visual as visual5 } from './fight5Mode/visual';
+import { spawm as spawm5 } from './fight5Mode/rush/spawm';
+import { carrier as carrier5 } from './fight5Mode/rush/carrier';
+import { attacker as attacker5 } from './fight5Mode/rush/attacker';
+import { worker as worker5 } from './fight5Mode/rush/worker';
+import { ranger as ranger5 } from './fight5Mode/rush/ranger';
+import { visual as visual5 } from './fight5Mode/rush/visual';
+import { spawm as spawm52 } from './fight5Mode/development/spawm';
+import { carrier as carrier52 } from './fight5Mode/development/carrier';
+import { dropouter as dropouter52 } from './fight5Mode/development/dropouter';
+import { attacker as attacker52 } from './fight5Mode/development/attacker';
+import { healer as healer52 } from './fight5Mode/development/healer';
+import { worker as worker52 } from './fight5Mode/development/worker';
+import { carryouter as carryouter52 } from './fight5Mode/development/carryouter';
+import { ranger as ranger52 } from './fight5Mode/development/ranger';
+import { visual as visual52 } from './fight5Mode/development/visual';
+import { overmind } from './overMind';
 
 export function runAction() {
     let mySpawn = getObjectsByPrototype(StructureSpawn).find(s => s.my);
@@ -73,11 +82,23 @@ function run4Mode() {
 }
 
 function run5Mode() {
-    runOvermind5();
-    spawm5();
-    carrier5();
-    worker5();
-    ranger5();
-    attacker5();
-    visual5();
+    if (overmind.fightMode == 'rush') {
+        spawm5();
+        carrier5();
+        worker5();
+        ranger5();
+        attacker5();
+        visual5();
+    }
+    else if (overmind.fightMode == '运营') {
+        spawm52();
+        carrier52();
+        carryouter52();
+        dropouter52();
+        worker52();
+        ranger52();
+        attacker52();
+        healer52();
+        visual52();
+    }
 }

@@ -1,4 +1,4 @@
-import '../importAll';
+import '../../importAll';
 import { setobstacleCarrier } from './setobstacleCarrier';
 
 export function carrier() {
@@ -19,12 +19,7 @@ export function carrier() {
                     carriermix.moveTo(carriermix_Container_findClosest);
                 }
             } else {
-                //保留extension的逻辑
-                let carriermix_myExtension_findClosest = findClosestByRange(carriermix, myExtension)
-                if (carriermix.transfer(carriermix_myExtension_findClosest, RESOURCE_ENERGY) == ERR_NOT_IN_RANGE) {
-                    carriermix.moveTo(carriermix_myExtension_findClosest);
-                }
-                else if (carriermix.transfer(mySpawn, RESOURCE_ENERGY) == ERR_NOT_IN_RANGE) {
+                if (carriermix.transfer(mySpawn, RESOURCE_ENERGY) == ERR_NOT_IN_RANGE) {
                     carriermix.moveTo(mySpawn);
                 }
             }

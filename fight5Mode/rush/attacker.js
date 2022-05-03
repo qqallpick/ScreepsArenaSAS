@@ -1,5 +1,5 @@
-import '../importAll';
-import { isCreepBirth, canCreepAttck } from '../utils';
+import '../../importAll';
+import { isCreepBirth, canCreepAttck } from '../../utils';
 import { setobstacle } from './setobstacle';
 import { setobstaclegoto } from './setobstaclegoto';
 import { Visual } from 'game/visual'

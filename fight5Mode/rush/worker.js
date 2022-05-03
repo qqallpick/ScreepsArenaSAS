@@ -1,4 +1,4 @@
-import '../importAll';
+import '../../importAll';
 
 export function worker() {
     let mySpawn = getObjectsByPrototype(StructureSpawn).filter(s => s.my)[0];

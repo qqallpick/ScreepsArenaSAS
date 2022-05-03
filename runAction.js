@@ -17,9 +17,16 @@ import { attacker as attacker4 } from './fight4Mode/attacker';
 import { worker as worker4 } from './fight4Mode/worker';
 import { ranger as ranger4 } from './fight4Mode/ranger';
 import { visual as visual4 } from './fight4Mode/visual';
+import { runOvermind as runOvermind5 } from './fight5Mode/overMind';
+import { spawm as spawm5 } from './fight5Mode/spawm';
+import { carrier as carrier5 } from './fight5Mode/carrier';
+import { attacker as attacker5 } from './fight5Mode/attacker';
+import { worker as worker5 } from './fight5Mode/worker';
+import { ranger as ranger5 } from './fight5Mode/ranger';
+import { visual as visual5 } from './fight5Mode/visual';
 
 export function runAction() {
-    let mySpawn = getObjectsByPrototype(StructureSpawn).filter(s => s.my)[0];
+    let mySpawn = getObjectsByPrototype(StructureSpawn).find(s => s.my);
     switch (mySpawn.fightMode) {
         case 1: run1Mode();
             break;
@@ -28,6 +35,8 @@ export function runAction() {
         case 3: run3Mode();
             break;
         case 4: run4Mode();
+            break;
+        case 5: run5Mode();
             break;
     }
 }
@@ -61,4 +70,14 @@ function run4Mode() {
     ranger4();
     attacker4();
     visual4();
+}
+
+function run5Mode() {
+    runOvermind5();
+    spawm5();
+    carrier5();
+    worker5();
+    ranger5();
+    attacker5();
+    visual5();
 }
